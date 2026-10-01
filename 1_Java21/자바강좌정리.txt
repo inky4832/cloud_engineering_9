@@ -1,0 +1,41 @@
+강사명: 인경열
+이메일: inky4832@daum.net
+github: https://github.com/inky4832 
+        https://github.com/inky4832/cloud_engineering_9
+		
+		
+자바
+1일차 학습목표
+1) 환경설정 
+  -JDK21
+  -Intellij IDE
+
+2) 데이터종류
+  -기본형
+  -참조형
+
+3) 변수
+  -용도
+  -문법
+
+4) 연산자
+  -산술/비교/증감/대입/3항대입자  
+
+--------------------------------------------
+데이터 종류
+1. 기본형 
+	
+	 수치형 - 정수형: byte ( 1byte)
+			        short (2byte)
+					int  (4byte)- 기본 
+					long (8byte)
+					
+	       - 실수형: float (4byte)
+		            double (8byte) - 기본 
+					
+	 논리형:  boolean ( 1byte ) - true/false
+	 문자형:  char ( 2byte )
+
+
+2. 참조형 
+   - 기본형을 제외한 나머지들 ( 클래스, 인터페이스, 배열 )
