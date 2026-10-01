@@ -29,13 +29,28 @@ github: https://github.com/inky4832
 			        short (2byte)
 					int  (4byte)- 기본 
 					long (8byte)
-					
+			 ==> 표현: 10진수,2진수,8진수,16진수 모두 가능 
+				    ex. 100 
+			 
 	       - 실수형: float (4byte)
 		            double (8byte) - 기본 
-					
-	 논리형:  boolean ( 1byte ) - true/false
+			 ==> 표현: 소수점, 지수표현 모두 가능 
+			      ex. 3.14 ( 기본인  double로 처리됨 )
+  			          3.14F, 3.14f ( float 로 처리됨 )
+					  3.14, 3.14D, 3.14d (double로 처리됨 )
+					  
+	 논리형:  boolean ( 1byte ) 
+         ==> 표현식:	 true/false
+		 
 	 문자형:  char ( 2byte )
+         ==> 표현식: '남', '여', 'A'
 
+		==> 문자열은 기본형에 포함안됨 (****************)
+		    표현식: "hello", "홍길동"
+			문자열은 참조형 데이터임. ( String 클래스가 처리)
 
 2. 참조형 
    - 기본형을 제외한 나머지들 ( 클래스, 인터페이스, 배열 )
+-------------------------------------------------------
+main 메서드 필수( 지정된 코드가 아니면 실행이 안됨 )
+형식: public static void main(String[] args){}
