@@ -221,3 +221,45 @@ switch(조건식){
 	    System.out.println("hello");
 	    ++n;
 	   }while(n < 6);
+	   
+ break문 ( 용도: 반복문을 빠져나올때 )
+ 
+ 문법:
+     
+	   for(시작값; 조건식; 증감연산자){
+          ..
+          if(조건식)break;
+		  ...
+	   }
+	   System.out.end("End");
+	   
+ continue문 ( 용도: 반복해야될 특정 문장을 skip할 목적)
+ 
+ 문법:
+     
+	   for(시작값; 조건식; 증감연산자){
+          문장1;
+          if(조건식)continue;
+		  문장2;
+		  문장3;
+	   }
+	   System.out.end("End");
+	   
+변수 scope 
+     
+	   for(시작값; 조건식; 증감연산자){
+           int n=10; // for블럭내에서만 사용가능
+	   }
+	   System.out.end(n);  //컴파일에러
+	   
+	   if(조건식){
+	       int n2=10; // if블럭내에서만 사용가능
+	   }
+	    System.out.end(n2);  //컴파일에러
+		
+	==> 해결
+	    int n2=0
+	   if(조건식){
+	       n2=10; // if블럭내에서만 사용가능
+	   }
+	    System.out.end(n2);  //출력
