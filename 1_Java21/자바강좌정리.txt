@@ -477,16 +477,33 @@ switch(조건식){
 		String sex;
 		
       }
+	  ==> Cat.java
 	  
 	  public class TestCat{
 	    public static void main( String [] args){
 		
 		}
 	  }
+	  ==> TestCat.java
+	  
 	--> 특징: main메서드가 없음 ( 독자적으로 실행불가 )
 	         추가로 main메서드를 가진 클래스가 필요함.
 			 main 메서드가 가장 먼저 메모리(method area)에 자동으로 올라가고,
 			 자동으로 호출해서 main이 실행됨.
 			 그리고 main 메서드안에서 Cat클래스를 메모리를 올려주는 작업을 한다.
+			 ( 객체생성(인스턴스화) 이라고 부름 )
 			 
-			 
+ 객체생성 방법
+ 
+ 문법:
+
+     클래스명 변수명 = new 클래스명();
+	 
+	ex.  Cat  c = new Cat(); // Cat 클래스 객체생성(인스턴스화)
+	
+	
+	 
+	 
+	 
+	 
+    
