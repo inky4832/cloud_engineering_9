@@ -461,11 +461,11 @@ switch(조건식){
     public class 클래스명{
 	  //구성요소 3가지 
 		
-	   인스턴스변수(멤버변수)
+	   인스턴스변수(멤버변수): 데이터 저장
 	   
 	   메서드(멤버메서드)
 	
-	   생성자
+	   생성자 : 인스턴스 변수 초기화
 	
 	}
 	
@@ -481,7 +481,7 @@ switch(조건식){
 	  
 	  public class TestCat{
 	    public static void main( String [] args){
-		
+		  Cat  c = new Cat(); 
 		}
 	  }
 	  ==> TestCat.java
@@ -502,8 +502,31 @@ switch(조건식){
 	ex.  Cat  c = new Cat(); // Cat 클래스 객체생성(인스턴스화)
 	
 	
+------------------------------------------------------
+생성자(constructor)
+
+ 용도: 	 인스턴스 변수 초기화
+ 
+ 문법: 
+ 
+      public 클래스명( [변수, 변수2, ...]){ // 변수를 파라미터(parameter)라고 부름. 로컬변수에 해당.
+	  
+	  }
 	 
+	 ex. 
+	    public Cat(){} <===    new Cat();
+							    new Cat(10); // 갯수 불일치
+		public Cat(String n){} <== new Cat("야옹이");
+		                           new Cat(10); // 타입 불일치
+		public Cat(String n, int a){} <== new Cat("야옹이", 2);
+		..                               new Cat(2,"야옹이"); //순서 불일치
 	 
-	 
-	 
+ 특징:
+    반드시 호출해야 된다.
+	new 클래스명()형식
+	new 클래스명(값, 값,.. )형식  // 값을 인자(argument)라고 부름. 생성자의 파라미터와 매핑됨.
+	
+	반드시 파라미터(변수)와 인자(값)가 일치해야 된다.(************)
+	==> 타입 and 갯수 and 순서
+	
     
