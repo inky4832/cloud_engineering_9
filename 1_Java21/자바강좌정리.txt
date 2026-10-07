@@ -520,6 +520,12 @@ switch(조건식){
 	                               단, 인자리스트는 반드시 달라야 된다.(타입,갯수,순서)
 	명시적으로 생성자를 생성하지 않으면 자동으로 기본생성자가 생성됨. ( public 클래스명(){} )	
 
+	기본생성자는 관례적으로 무조건 사용하자.
+
+ 장점:
+      어떠한 초기화작업(인스턴스변수 직접접근 또는 set메서드 이용 )보다 가장 빠르다.(권장)
+	  검증작업이 가능.
+	  
 
 this 키워드 
 
@@ -539,6 +545,10 @@ this 키워드
 
 문법: 
 
+   //생성자	
+   public Cat(String n){}
+
+   //메서드
    public 리턴타입 메서드명([변수,...]){
        ..
 	   [return 값];
@@ -644,7 +654,7 @@ this 키워드
 	 
 	  사용: 
 	  
-	   Test.method2("홍길동");
+	   Test.method2("홍길동");  //  Math.abs()
 	  
 	   Test t = new Test();
 	   int num = t.method(10,20);
@@ -725,6 +735,31 @@ Call by value  vs Call by value Reference
 	    사용:
 	     
 	     Test t = new Test();
-		 t.method(10);
-		 t.method(10,20);
-		 t.method(10,20,30);
+		 t.method(10); // [10]
+		 t.method(10,20); // [10,20]
+		 t.method(10,20,30); // [10,20,30]
+		 
+		 
+		public String printf(String n, Object ... s) //가장 마지막 파라미터에서만 사용가능
+		 
+		System.out.printf("",값);
+		System.out.printf("",값,값2);
+		System.out.printf("",값,값,값);
+		
+------------------------------------------------
+
+     public class Test{
+	
+		 public void method(int  n){ 
+		    
+			문장1;
+		if(조건식)return;  //method 실행을 중지하고자 할 때 사용.
+			문장2;
+			문장3;
+			
+		 }
+	  }
+	  
+	  
+	  Test t = new Test();
+	  t.method(100);
