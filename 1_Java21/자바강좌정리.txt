@@ -688,9 +688,9 @@ Call by value  vs Call by value Reference
 	     
 	     Test t = new Test();
 		 int n = 10;
-		 System.out.println(n);
-	     t.method(n);
-		 System.out.println(n);
+		 System.out.println(n); //10
+	     t.method(n); //기본형 
+		 System.out.println(n); // 10
   
   
   나. Call by value Reference
@@ -707,6 +707,24 @@ Call by value  vs Call by value Reference
 	     
 	     Test t = new Test();
 		 int [] n = {10,20,30}
-		 System.out.println(Arrays.toString(n);
-	     t.method(n);
-         System.out.println(Arrays.toString(n);
+		 System.out.println(Arrays.toString(n); // [10,20,30]
+	     t.method(n); // 참조형 
+         System.out.println(Arrays.toString(n); // [20,20,30] 
+		 
+---------------------------------------------------
+가변인자 
+ 용도: 메서드 호출시 인자갯수가 파라미터갯수와 달라도 됨.
+ 
+      public class Test{
+	
+		 public void method(int ... n){ // 내부적으로 배열로 처리
+		    
+		 }
+	  }
+	  
+	    사용:
+	     
+	     Test t = new Test();
+		 t.method(10);
+		 t.method(10,20);
+		 t.method(10,20,30);
