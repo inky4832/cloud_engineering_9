@@ -551,38 +551,76 @@ this 키워드
 		c.메서드([값,..]);
    ==> 파라미터와 인자(argument)는 반드시 일치해야 됨( 타입,순서,갯수 )     
   -호출해서 메서드가 작업후에는 반드시 호출한 곳으로 돌아온다.( 리턴(return)한다고 부름)
-  
+  - return 할때 값과 리턴타입 은 반드시 일치해야 됨.(return 값이 없는 경우에는 void 로 지정함)
 
 4가지 형식
 1) 파라미터없고 리턴값 없음.
 
 	 public class Test{
-		 public 리턴타입 메서드명([변수,...]){
-		 
+		 public void method(){
+		   ...
 		 }
 	 }
 	 
+	사용: 
+	   Test t = new Test();
+	   t.method();
+	   System.out.println("End");
 	 
 
 2) 파라미터있고 리턴값 없음.
      public class Test{
-		 public 리턴타입 메서드명([변수,...]){
+		//오버로딩 메서드 가능
+	     public void method(String n, int n2){
+		    ...
+		 }
 		 
+	     public void method(String n){
+		    ...
+		 }
+		 
+		 public void method(int n){
+		    ...
 		 }
 	 }
-	 
+	  사용: 
+	   Test t = new Test();
+	   t.method(10);
+	   t.method("홍길동");
+	   t.method("홍길동",10);
+	   System.out.println("End");
 	 
 3) 파라미터없고 리턴값 있음.
 
       public class Test{
-		 public 리턴타입 메서드명([변수,...]){
-		 
+	  
+		 public int method(){ // float,double 가능
+			...
+			return 100;
 		 }
+		 public String method2(){ 
+			...
+			return "홍길동";
+		 }
+		 
 	 }
+	   사용: 
+	   Test t = new Test();
+	   int num = t.method();
+	   String s= t.method2();
+	   System.out.println("End");
+	 
+	 
 4) 파라미터있고 리턴값 있음.
 
       public class Test{
-		 public 리턴타입 메서드명([변수,...]){
+		 public int method(int n, int n2){
 		 
+			 ...
+			 return n+n2;
 		 }
 	 }
+	 
+	  사용: 
+	   Test t = new Test();
+	   int num = t.method(10,20);
