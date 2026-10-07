@@ -648,3 +648,23 @@ this 키워드
 	  
 	   Test t = new Test();
 	   int num = t.method(10,20);
+	   
+2) 같은 클래스에서 메서드 호출할 때 
+
+    public class Test{
+	
+		 public void method(){
+		   ...
+		 }
+		 
+		 public void method2(){
+		   //같은 클래스내의 메서드 호출방법 
+		   this.method(); //내부에서 호출
+		   method(); // this생략 가능
+		 }
+	 }
+	 
+	 사용: 
+	   Test t = new Test();
+	   t.method(); // 외부에서 호출
+	   System.out.println("End");
