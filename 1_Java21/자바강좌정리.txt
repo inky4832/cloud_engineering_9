@@ -660,7 +660,7 @@ this 키워드
 		 public void method2(){
 		   //같은 클래스내의 메서드 호출방법 
 		   this.method(); //내부에서 호출
-		   method(); // this생략 가능
+		   method(); // this 생략 가능(일반적인 방법)
 		 }
 	 }
 	 
@@ -668,3 +668,45 @@ this 키워드
 	   Test t = new Test();
 	   t.method(); // 외부에서 호출
 	   System.out.println("End");
+----------------------------------------------------------------------
+Call by value  vs Call by value Reference
+
+개념: 메서드 호출시, 전달되는 인자(값,argument)가 기본형 또는 참조형에 따라서 
+    전달받은 메서드에서 처리방식이 달라짐을 의미.
+	
+  가. Call by value
+	 - 메서드에 전달되는 값이 기본형  
+	
+	  public class Test{
+	
+		 public void method(int n2){
+		    n2 = 20;
+		 }
+	  }
+	  
+	  사용:
+	     
+	     Test t = new Test();
+		 int n = 10;
+		 System.out.println(n);
+	     t.method(n);
+		 System.out.println(n);
+  
+  
+  나. Call by value Reference
+     - 메서드에 전달되는 값이 참조형 
+	 
+	 	 public class Test{
+	
+		 public void method(int [] n2){
+		    n2[0] = 20;
+		 }
+	  }
+	  
+	  사용:
+	     
+	     Test t = new Test();
+		 int [] n = {10,20,30}
+		 System.out.println(Arrays.toString(n);
+	     t.method(n);
+         System.out.println(Arrays.toString(n);
