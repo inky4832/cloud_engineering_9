@@ -975,9 +975,6 @@ Call by value  vs Call by value Reference
 	  }
   
 -------------------------------------------------------------
-
-
-
 접근지정자(access modifier)
 개념: 클래스간의 멤버 접근을 관리하는 방법 
 문법:
@@ -989,3 +986,36 @@ Call by value  vs Call by value Reference
 
 사용: 클래스,변수,메서드,생성자 모두 사용 가능 
 -------------------------------------------------------------
+Object 클래스 
+
+개념: 최상위 클래스. 
+메서드포함: ....
+		  toString()
+		  
+		  
+toString 구현:  
+			   public String toString(){
+				 retur getClass().getName() + '@' + Integer.toHexString(hashCode());
+			   }
+			   
+용도: 클래스의 변수값 출력시 사용됨.
+
+     ex.
+	 
+	   public class Employee {  //  자동으로 extends Object 가 지정됨
+	
+			String name;
+			int salary;
+			
+			//생성자 
+			
+			// name과 salary 한번에 출력
+			public String getEmployee() {
+		      return name+"\t"+salary;
+	        }
+	  }
+	  
+	  
+	  //사용 
+	   Employee e = new Emplyee("홍길동",2000);
+	   System.out.println(e.getEmployee());
