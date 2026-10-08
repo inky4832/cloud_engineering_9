@@ -933,7 +933,7 @@ Call by value  vs Call by value Reference
 	 a(10);
 	 a("홍길");
 
-다형성 사용시 주의할점:
+다형성 사용시 주의할점1:
 
       public class Pet {
 	   
@@ -949,13 +949,26 @@ Call by value  vs Call by value Reference
 	  
 	  Pet p = new Cat();
 	  p.name="야옹이"; // 가능 
-	  p.age=2;        // 컴파일 오류
+	  p.age=2;        // 컴파일 오류 ( Pet 타입인 p에는 age변수가 없기 때문)
 	  Cat c = (Cat)p;
 	  c.age=2;        //가능    
 	  
-	  
-	  
+다형성 사용시 주의할점2:	  
 
+  ex. 	  
+      Pet [] p = {   new Pet(), new Cat(), new Dog() };
+	  
+	  저장된 Pet배열에서 Cat만 추출하자. (해결: instanceof 연산자 이용 )
+	  
+	  for( Pet p1 : p ){
+	    if(p1 instanceof Cat){
+		   //Cat만 추출 가능
+		   //age 출력
+		   Cat c = (Cat)p1;
+	       c.age=2; 
+		   
+		}
+	  }
   
 -------------------------------------------------------------
 
