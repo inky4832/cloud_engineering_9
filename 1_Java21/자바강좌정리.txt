@@ -898,8 +898,32 @@ Call by value  vs Call by value Reference
        자식메서드            void   method(){}
 	   (오버라이딩)  protectd  void   method(){}
 	               public   void   method(){}
-	   
+
+용도: 재사용성 	   
 -------------------------------------------------------------
+다형성(polymorphism)
+개념: 상속전제.
+     하나의 참조변수가 서로 다른 타입을 참조할 수 있는 능력.
+
+   다형성 적용 안된 경우:   Cat c  = new Cat();
+                         Dog d  =  new Dog();
+						 Pet p = new Pet();
+						 
+   다형성 적용: ( 같은 종류,   부모 = 자식 )  						 
+				Pet p = new Pet();
+				   p = new Cat();
+				   p = new Dog();
+				   
+				   
+활용: 
+  가. 배열 
+            Pet [] p = {   new Pet(), new Cat(), new Dog() };
+			Obejct [] obj = { new Pet(), new Cat(), new Dog(), "홍", 10, 3.14, true,...};
+				   
+-------------------------------------------------------------
+
+
+
 접근지정자(access modifier)
 개념: 클래스간의 멤버 접근을 관리하는 방법 
 문법:
