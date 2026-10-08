@@ -958,7 +958,7 @@ Call by value  vs Call by value Reference
   ex. 	  
       Pet [] p = {   new Pet(), new Cat(), new Dog() };
 	  
-	  저장된 Pet배열에서 Cat만 추출하자. (해결: instanceof 연산자 이용 )
+	  저장된 Pet배열에서 Cat만 추출하자. (해결: instanceof 연산자 이용, 반드시 자식부터 비교필수 )
 	  
 	  for( Pet p1 : p ){
 	    if(p1 instanceof Cat){
@@ -966,7 +966,11 @@ Call by value  vs Call by value Reference
 		   //age 출력
 		   Cat c = (Cat)p1;
 	       c.age=2; 
-		   
+		}else if (p1 instanceof Dog){
+		
+		}   
+		}else if (p1 instanceof Pet){
+		
 		}
 	  }
   
