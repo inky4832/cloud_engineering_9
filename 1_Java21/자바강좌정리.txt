@@ -783,3 +783,30 @@ Call by value  vs Call by value Reference
 	-단 한번만 생성됨.                        -new 할때마다 매번 생성 	
 	- 인스턴스변수,인스턴스메서드,this 사용 불가  - this 사용 가능  
 	- method area 메모리에 저장                - heap 메모리에 저장  
+											 - static 요소 사용 가능 \\
+	- 프로그램 종료시 제거됨 				    - 객체소멸시 제거됨		
+	- 반드시 클래스명.멤버  형식 사용 
+									
+ 용도:
+   static 변수: 누적용 ( 단한번 생성 + 오래 유지 가능 )
+   static 메서드: 객체 생성없이 메서드 사용 ( 편리함 )
+               ex.  Math.abs,  Integer.parseInt,
+			   
+   static 클래스(중첩클래스)
+     ex.
+	    class Outer{
+			//변수
+			//메서드
+			//생성자 
+			
+			
+			class Inner{ // 중첩클래스 
+			
+			
+			}
+		 static class Inner2{ // 중첩클래스 
+			
+			
+			}
+		
+		}
