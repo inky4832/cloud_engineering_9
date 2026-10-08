@@ -997,6 +997,9 @@ toString 구현:
 			   public String toString(){
 				 retur getClass().getName() + '@' + Integer.toHexString(hashCode());
 			   }
+특징:
+  - 모든 클래스가 사용 가능;
+  - System.out.println(참조변수); 하면 자동으로 toString()호출됨. (****************)
 			   
 용도: 클래스의 변수값 출력시 사용됨.
 
@@ -1018,4 +1021,38 @@ toString 구현:
 	  
 	  //사용 
 	   Employee e = new Emplyee("홍길동",2000);
-	   System.out.println(e.getEmployee());
+	   System.out.println(e.getEmployee()); // Object의 toString() 메서드를 사용하면 
+	                                           getEmployee()사용안해도 됨.
+											   
+		System.out.println(e); //toString() 자동호출됨.									     
+		System.out.println(e.toString()); 
+		
+  결론: 클래스를 만들때 Object의 toString() 재정의해서 사용하자. 
+  
+-----------------------------------------------------------------------
+추상클래스 (abstract class )
+
+문법: 
+     public abstract  class Employee {
+	  
+	     //구성요소 4가지 
+		 변수
+		 메서드: {} 구현부 가짐 
+		  ex. public void a(){}
+		 생성자 
+		 
+		 추상메서드: {} 구현부 없음  + abstract 지정
+		  ex. public abstract void a(); <================ 미구현된 메서드임.(불완전 메서드)
+	 
+	 }
+	 
+	 public class Manager extends Employee{
+	 
+	     @Override 
+	    public void a(){}  //부모 추상메서드 재정의 필수
+	 }
+
+특징:
+   - new 사용불가 ( 객체생성 불가 )
+     해결: 상속이용해서 자식클래스를 통해서 불완전한 추상클래스 구성요소를 사용할 수 있음. 
+   -상속받은 자식클래스에서는 반드시 부모의 추상메서드를 재정의(오버라이딩)해야 됨.(************)
