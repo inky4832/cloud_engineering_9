@@ -913,13 +913,30 @@ Call by value  vs Call by value Reference
 				Pet p = new Pet();
 				   p = new Cat();
 				   p = new Dog();
-				   
+				
+				Cat c = new Pet(); //오류 해결: 형변환 
+				
+				Cat c = (Cat)new Pet();
 				   
 활용: 
   가. 배열 
             Pet [] p = {   new Pet(), new Cat(), new Dog() };
 			Obejct [] obj = { new Pet(), new Cat(), new Dog(), "홍", 10, 3.14, true,...};
-				   
+
+  나. 메서드 파라미터 
+
+     //public void a(int n ){}
+	 //public void a(String  n ){}
+	 
+	 public void a(Object   n ){} //다형성 적용
+	 
+	 a(10);
+	 a("홍길");
+
+
+
+
+  
 -------------------------------------------------------------
 
 
