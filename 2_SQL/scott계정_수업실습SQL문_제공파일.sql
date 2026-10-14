@@ -1,42 +1,42 @@
 
 --  SQL문 주석문
--- MySQL SQL 문서: https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/
+
 -- ////////////////////////////////////////////////////
 -- /////// SELECT 문 실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/select.html
+
 -- 1. 테이블내의 모든 데이터 보기
 
  use testdb;
 
- SELECT * FROM dept;
+ SELECT * FROM DEPT;
  
  SELECT * 
- FROM dept;
+ FROM DEPT;
  
 select * 
-from dept;
+from DEPT;
 
 select * 
-from emp
+from EMP
 limit 3;
 
 SELECT *
-FROM emp
+FROM EMP
 limit  0 , 5;  -- 0 부터 5개 
 
 -- 2. 특정 컬럼 데이터 보기
 
 SELECT empno, ename, job, hiredate
-FROM emp;
+FROM EMP;
  
  SELECT ename, empno,  job, hiredate,  sal+10
- FROM emp;
+ FROM EMP;
 
 
 -- 3. 연산 가능  ( +, - , *, /, %(나머지))
 
 SELECT empno, ename,   sal,  sal + 10, sal-10, sal*1.1 , sal / 3,  sal % 3,  mod(sal, 3) 
-FROM emp;
+FROM EMP;
 
  
  -- 4. 별칭
@@ -45,112 +45,111 @@ FROM emp;
  -- 필요시  "별칭" 사용
 
 SELECT empno AS "사원 번호" , ename AS 성명, sal 급여 
-FROM emp
+FROM EMP;
 
 SELECT empno AS "사 번", ename AS "성명",  sal "급여" , sal * 12  as "연봉"
-FROM emp;
+FROM EMP;
 
 -- 5.  null 값
 
 SELECT empno, ename, sal, comm, comm + 10, (sal * 12) + comm as "연봉" 
-FROM emp;
+FROM EMP;
 
 
 SELECT empno, ename,   sal,  comm,  (sal * 12) + comm as "연봉",  (sal*12) + ifnull(comm, 0) as "연봉" 
-FROM emp;
+FROM EMP;
 
 
 -- 6. 중복제거 
 
 SELECT job
-FROM emp;
+FROM EMP;
 
 SELECT distinct job
-FROM emp;
+FROM EMP;
  
 -- ////////////////////////////////////////////////////
 -- /////// WHERE  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/non-typed-operators.html
 
 SELECT empno, ename, job, deptno
-FROM emp
+FROM EMP
 WHERE deptno = 30;
 
 -- 1) 비교연산자 ( =, !=, >, >= , <, <= )
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE sal <= 1000; 
 
 SELECT empno, ename, job, deptno
-FROM emp
-WHERE job = 'salesman'
+FROM EMP
+WHERE job = 'salesman';
 
-SELECT empno, ename, job, deptno , sal, hiredate 
-FROM emp 
+SELECT empno, ename, job, deptno, sal, hiredate 
+FROM EMP
 WHERE hiredate = '1980-12-17';
 
  -- 2) 비교연산자  : Between A and B , ISNULL, IN 연산자
 
  SELECT empno, ename, job, deptno
-FROM emp
+FROM EMP
 WHERE sal BETWEEN 800 AND 2000;
 
  SELECT empno, ename, sal, comm
-FROM emp
+FROM EMP
 WHERE comm IS NULL;
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE empno IN (7369,7566,7698);
 
  
  -- 3) like 연산자 :   % ,  _  패턴문자(와일드 카드문자)와 같이 사용
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE ename LIKE 'A%';
 
  SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE ename LIKE '%T%';
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE ename LIKE '_L%';
 
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE ename LIKE '%E_%' ESCAPE 'E';
 
   
 -- 4) 논리 연산자;   and  , or  , not 
 
 SELECT empno, ename, job, deptno, hiredate
-FROM emp
+FROM EMP
 WHERE job = 'salesman' AND sal >= 1500;
 
 SELECT empno, ename, job, deptno, hiredate
-FROM emp
+FROM EMP
 WHERE job = 'salesman' OR sal >= 1500;
 
 SELECT empno, ename, sal, comm
-FROM emp
+FROM EMP
 WHERE comm IS NOT NULL;
 
 -- 5)  부정 연산자
 
 SELECT empno, ename, job, deptno
-FROM emp
+FROM EMP
 WHERE sal NOT BETWEEN 800 AND 2000;
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE ename NOT LIKE 'A%';
 
 SELECT empno, ename, sal
-FROM emp
+FROM EMP
 WHERE empno NOT IN (7369,7566,7698);
 
 -- ////////////////////////////////////////////////////
@@ -159,63 +158,62 @@ WHERE empno NOT IN (7369,7566,7698);
  -- 11. 정렬
 
 SELECT empno, ename,  hiredate
-FROM emp
+FROM EMP
 ORDER BY hiredate;
 
  SELECT empno, ename,  hiredate
-FROM emp
+FROM EMP
 ORDER BY hiredate DESC ;
 
 SELECT empno, ename,  sal * 12 AS Annual
-FROM emp
+FROM EMP
 ORDER BY Annual;
 
  SELECT empno, ename,  sal * 12 AS Annual
-FROM emp
+FROM EMP
 ORDER BY 3;
  
  -- 다중 정렬
 SELECT empno, ename,  sal * 12 AS Annual
-FROM emp
+FROM EMP
 ORDER BY Annual, empno DESC;
 
  SELECT empno, ename,  sal * 12 AS Annual
-FROM emp
+FROM EMP
 ORDER BY 3, 1 DESC;
 
  -- ////////////////////////////////////////////////////
 -- /////// 단일함수  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/string-functions.html
 
  -- 1. 단일행함수 - 문자 데이터
 
 SELECT empno, lower(ename),  LOWER('HeLLO')
-FROM emp;
+FROM EMP;
 
  
 SELECT empno, UPPER(ename),  UPPER('HeLLO')
-FROM emp;
+FROM EMP;
 
  
 SELECT empno, CONCAT(ename, ' ', sal)
-FROM emp;
+FROM EMP;
 
-SELECT empno, CONCAT_WS(‘/’, ename, sal)
-FROM emp;
+SELECT empno, CONCAT_WS('/', ename, sal)
+FROM EMP;
 
 
 SELECT empno, LPAD(ename,10, '*'),  LPAD(sal, 10, '*')
-FROM emp;
+FROM EMP;
 
 SELECT empno, RPAD(ename,10, '*'),  RPAD(sal, 10, '*')
-FROM emp;
+FROM EMP;
 
 SELECT LEFT('hello', 2);      
 
 SELECT RIGHT('hello', 2);   
 
 SELECT empno, ename, SUBSTR(ename,1,2),  SUBSTR(ename,3), SUBSTR(ename, -1)
-FROM emp;
+FROM EMP;
 
  
 SELECT SUBSTRING_INDEX('www.mysql.com', '.', 2); 
@@ -224,18 +222,18 @@ SELECT SUBSTRING_INDEX('www.mysql.com', '.', 2);
 --  length 는 byte 기준으로 길이를 반환 ( 한글은 글자당 3byte 처리)
 
 SELECT empno, ename, LENGTH(ename), LENGTH('홍길동') 
-FROM emp;
+FROM EMP;
 
 
 -- char_length 는 실제 글자수 길이를 반환 ( 한글/영문 모두 한글자로 처리 )
 
 SELECT empno, ename, CHAR_LENGTH(ename)
-FROM emp;
+FROM EMP;
 
 SELECT LENGTH('홍길동'), CHAR_LENGTH('홍길동'); 
 
 SELECT empno, ename, sal, REPLACE(sal, '0','o')
-FROM emp;
+FROM EMP;
 
 SELECT INSERT('Hello World', 7, 5, 'MySQL');
 
@@ -256,27 +254,33 @@ SELECT TRIM('xxxbarxxx'),
        TRIM(TRAILING 'x' FROM 'xxxbarxxx');
 
 SELECT ename, REVERSE(ename)       
-FROM emp;
+FROM EMP;
 
 SELECT FORMAT(9876543.2145, 2);
 
 -- 정규표현식
 
-SELECT ename, REGEXP_LIKE(ename, '^M')
-FROM emp;
+-- MySQL / MariaDB 차이점으로 MariaDB는 REGEXP_LIKE()를 구현하지 않음
+-- SELECT ename, REGEXP_LIKE(ename, '^M') FROM EMP;
+-- REGEXP == RLIKE
+SELECT ename FROM EMP WHERE ename REGEXP '^M';
 
 SELECT REGEXP_REPLACE('a1b2', '[0-9]', '');
 
-SELECT REGEXP_REPLACE('a1b2', '[0-9]', '' ,1 ,2);
+-- MariaDB의 REGEXP_REPLACE는 3개의 인자만 지원함
+-- SELECT REGEXP_REPLACE('a1b2', '[0-9]', '' ,1 ,2);
+SELECT REGEXP_REPLACE('a1b2', '^([^0-9]*[0-9][^0-9]*)[0-9]', '\\1');
 
 SELECT REGEXP_SUBSTR('a1987b2c3', '[0-9]');               -- 1
 SELECT REGEXP_SUBSTR('a1987b2765c3', '[0-9]+');           -- 1987
-SELECT REGEXP_SUBSTR('a1987b2765c3', '[0-9]+', 1, 2);     -- 2765
+-- SELECT REGEXP_SUBSTR('a1987b2765c3', '[0-9]+', 1, 2);     -- 2765
+-- 함수가 특정 char에서 시작할 경우 REGEXP_SUBSTR(SUBSTR(,n))으로 우회 가능하나
+-- 해당 형태의 함수 (1,2번째 블록 사이)의 경우 MariaDB에서 지원하지 않으며, 따로 함수를 지정해줘야 함
+-- (https://www.sqlines.com/oracle-to-mariadb/regexp_substr)
+SELECT REGEXP_REPLACE('a1987b2765c3', '^[^0-9]*[0-9]+[^0-9]+([0-9]+).*$', '\\1'); -- 2765
 SELECT REGEXP_SUBSTR('123Hello456', '[A-Za-z]+');         -- Hello
 
  -- 1. 단일행함수 - 수치 데이터
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/numeric-functions.html
-
 
 SELECT ROUND(45.678), ROUND(45.678, 2) , ROUND(45.678, -1);
 
@@ -295,7 +299,6 @@ SELECT FLOOR(7 + (RAND() * 5));  --  7 <= R < 12
 SELECT FLOOR(1 + RAND() * 10);   --  1 <= R < 11 
 
  -- 1. 단일행함수 - 날짜 데이터
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/date-and-time-functions.html
 
 SELECT SYSDATE(), NOW();
 
@@ -310,7 +313,7 @@ SELECT HOUR('14:35:20');
 SELECT MINUTE('14:35:20');
 SELECT SECOND('14:35:20');
 
-SELECT ADDDATE('2008-01-02', 30), ADDDATE('2008-01-02’, -30);
+SELECT ADDDATE('2008-01-02', 30), ADDDATE('2008-01-02', -30);
 
 SELECT DATE_ADD('2008-01-02', INTERVAL 1 DAY) as A1,
        DATE_ADD('2008-01-02', INTERVAL 1 MONTH) as A2,
@@ -354,7 +357,7 @@ SELECT NOW(),
 
 SELECT STR_TO_DATE('2020-03-04','%Y-%m-%d'),
        STR_TO_DATE('01,5,2013','%d,%m,%Y'),
-       STR_TO_DATE('2020년03월05일','%Y년%m월%d일’),
+       STR_TO_DATE('2020년03월05일','%Y년%m월%d일'),
        STR_TO_DATE('2020-03-04 12:23:32','%Y-%m-%d %H:%i:%S');
 
  -- 1. 단일행함수 - 조건함수
@@ -367,17 +370,17 @@ SELECT empno, ename, sal, job,
                 WHEN 'SALESMAN' THEN sal * 1.5
                 ELSE sal 
        END AS 실수령
-FROM emp;
+FROM EMP;
 
 SELECT empno, ename, sal, 
        CASE     WHEN sal > 3500 THEN '이사급'
                 WHEN sal > 2500 THEN '과장급'
-                ELSE '사원급’ 
+                ELSE '사원급' 
        END AS 직급연봉
-FROM emp;
+FROM EMP;
 
 SELECT sal, IF(sal > 2500 , '과장이상급', '사원급')
-FROM emp;
+FROM EMP;
 
 
  -- 1. 단일행함수 - 형변환 함수
@@ -394,73 +397,72 @@ select '10',
 
  -- ////////////////////////////////////////////////////
 -- /////// 그룹함수  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/aggregate-functions.html
 
 
 SELECT AVG(sal), MAX(sal), MIN(sal), SUM(sal)
-FROM emp
+FROM EMP
 WHERE job = 'SALESMAN';
 
 SELECT COUNT(*), COUNT(comm),
        AVG(comm), AVG(IFNULL(comm,0)),
        COUNT(deptno), COUNT(DISTINCT deptno)
-FROM emp;
+FROM EMP;
 
 
 SELECT deptno, group_concat(ename) 
-FROM emp 
+FROM EMP 
 group by deptno; 
 
 SELECT deptno, group_concat(ename ORDER BY ename DESC) 
-FROM emp 
+FROM EMP 
 group by deptno; 
 
-SELECT deptno, group_concat(ename ORDER BY ename DESC SEPARATOR '-') FROM emp 
+SELECT deptno, group_concat(ename ORDER BY ename DESC SEPARATOR '-') FROM EMP 
 group by deptno;
 
 
 -- group by 문법
 
 SELECT deptno, COUNT(*), ROUND(AVG(sal)), MIN(sal), MAX(sal), SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY deptno;
 
 SELECT deptno, COUNT(*), ROUND(AVG(sal)), MIN(sal), MAX(sal), SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY deptno
 ORDER BY SUM(sal) DESC;
 
 SELECT deptno, job, COUNT(*), ROUND(AVG(sal)), SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY deptno,job
 ORDER BY 1;
 
 -- having 문법
 
 SELECT deptno, SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY deptno
 HAVING SUM(sal) > 7000;
 
 SELECT deptno, SUM(sal)
-FROM emp
+FROM EMP
 WHERE sal > 1500
 GROUP BY deptno
 HAVING SUM(sal) > 7000;
 
 SELECT deptno, ROUND(AVG(sal)), SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY deptno
 HAVING MAX(sal) > 2900;
 
 
 SELECT job, ROUND(AVG(sal)), SUM(sal)
-FROM emp
+FROM EMP
 GROUP BY job
 HAVING AVG(sal) > 2000;
 
 SELECT job, SUM(sal)
-FROM emp
+FROM EMP
 WHERE job != 'SALESMAN'
 GROUP BY job
 HAVING SUM(sal) > 5000
@@ -469,95 +471,93 @@ ORDER BY SUM(sal) DESC;
 
  -- ////////////////////////////////////////////////////
 -- /////// 조인(JOIN)  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/join.html
 
 
 SELECT empno, ename, dname
-FROM emp CROSS JOIN dept;
+FROM EMP CROSS JOIN DEPT;
 
 SELECT empno, ename, dname
-FROM emp NATURAL JOIN dept;
+FROM EMP NATURAL JOIN DEPT;
 
 SELECT empno, ename, dname, deptno
-FROM emp e NATURAL JOIN dept d;
+FROM EMP e NATURAL JOIN DEPT d;
 
 SELECT e.empno, e.ename, d.dname, e.deptno
-FROM emp e NATURAL JOIN dept d;
+FROM EMP e NATURAL JOIN DEPT d;
 
 -- using 절 
 SELECT empno, ename, dname
-FROM emp JOIN dept USING(deptno);
+FROM EMP JOIN DEPT USING(deptno);
 
 SELECT e.empno, e.ename, d.dname, e.deptno
-FROM emp e JOIN dept d USING(deptno);
+FROM EMP e JOIN DEPT d USING(deptno);
 
 -- # 에러 
-SELECT e.empno, e.ename, d.dname, e.deptno
-FROM emp e JOIN dept d USING(e.deptno);
+-- SELECT e.empno, e.ename, d.dname, e.deptno
+-- FROM EMP e JOIN DEPT d USING(e.deptno);
 
 -- ON 절
 SELECT empno, ename, dname, loc , e.deptno
-FROM emp e JOIN dept d ON e.deptno = d.deptno;
+FROM EMP e JOIN DEPT d ON e.deptno = d.deptno;
 
 SELECT empno, ename, dname, loc , sal,  e.deptno
-FROM emp e JOIN dept d ON e.deptno = d.deptno
+FROM EMP e JOIN DEPT d ON e.deptno = d.deptno
 WHERE sal > 2500;
 
 SELECT empno, ename, dname,  sal, grade
-FROM emp e JOIN dept d ON e.deptno = d.deptno
-           JOIN salgrade s ON e.sal BETWEEN s.LOSAL AND s.HISAL;
+FROM EMP e JOIN DEPT d ON e.deptno = d.deptno
+           JOIN SALGRADE s ON e.sal BETWEEN s.LOSAL AND s.HISAL;
 
 
 -- self 조인
 SELECT e.ename 사원, m.ename 관리자
-FROM emp e JOIN emp m ON e.mgr = m.empno;
+FROM EMP e JOIN EMP m ON e.mgr = m.empno;
 
 -- outer 조인
 
 SELECT empno, ename, dname, d.deptno
-FROM emp e RIGHT OUTER JOIN dept d ON e.deptno = d.deptno;
+FROM EMP e RIGHT OUTER JOIN DEPT d ON e.deptno = d.deptno;
 
 --  # 신입사원 추가
-INSERT INTO emp VALUES ( 9000, 'TEST','SALESMAN', 7499, '90/01/01', 600, NULL, NULL );
+INSERT INTO EMP VALUES ( 9000, 'TEST','SALESMAN', 7499, '90/01/01', 600, NULL, NULL );
 
 SELECT empno, ename, dname, d.deptno
-FROM emp e LEFT OUTER JOIN dept d ON e.deptno = d.deptno;
+FROM EMP e LEFT OUTER JOIN DEPT d ON e.deptno = d.deptno;
 
 
 
  -- ////////////////////////////////////////////////////
 -- /////// 서브쿼리(Subquery)  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/subqueries.html
 
 SELECT empno, ename, job, sal
-FROM emp
+FROM EMP
 WHERE sal > ( SELECT sal 
-              FROM emp 
+              FROM EMP 
               WHERE ename = 'scott');
 
 
 SELECT empno, ename, job, sal
-FROM emp
+FROM EMP
 WHERE job = ( SELECT job
-              FROM emp
+              FROM EMP
               WHERE empno = 7521 )
 AND
       sal > ( SELECT sal
-              FROM emp
+              FROM EMP
               WHERE empno = 7934 );
 
 
 SELECT empno, ename, job, sal, deptno
-FROM emp
+FROM EMP
 WHERE sal < (SELECT AVG(sal)
-             FROM emp );
+             FROM EMP );
 
 
 SELECT deptno, MIN(sal)
-FROM emp 
+FROM EMP 
 GROUP BY deptno
 HAVING MIN(sal) > ( SELECT MIN(sal)
-                    FROM emp
+                    FROM EMP
                     WHERE deptno = 20 );
 
 
@@ -565,42 +565,42 @@ HAVING MIN(sal) > ( SELECT MIN(sal)
 
 -- # IN 연산자
 SELECT empno, ename, job, hiredate, sal, deptno
-FROM emp
+FROM EMP
 WHERE sal IN ( SELECT MIN(sal)
-               FROM emp
+               FROM EMP
                GROUP BY job );
 
 
 -- #  ALL, ANY 연산자
 -- #가.  < all  :  서브쿼리의 최소값 보다 작은 값을 반환함.
-              :  min(sal) 로도 구현 가능
+--              :  min(sal) 로도 구현 가능
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal < ALL ( SELECT sal
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal < ( SELECT min(sal)
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 -- #  나. > all :   서브쿼리의 최대값 보다  큰  값을 반환함.
             :   max(sal) 으로도 구현 가능
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal > ALL ( SELECT sal
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal > ( SELECT max(sal)
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 
@@ -609,16 +609,16 @@ WHERE  sal > ( SELECT max(sal)
               :  max(sal)
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal < any ( SELECT sal
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal < ( SELECT max(sal)
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
        
@@ -629,16 +629,16 @@ WHERE  sal < ( SELECT max(sal)
   
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal > any ( SELECT sal
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 
 SELECT empno, ename, sal
-FROm emp
+FROm EMP
 WHERE  sal > ( SELECT min(sal)
-                        FROM emp
+                        FROM EMP
 			WHERE job = 'MANAGER');
 
 
@@ -651,42 +651,40 @@ WHERE  sal > ( SELECT min(sal)
 -- #  EXISTS 연산자
 
 SELECT empno, ename, job, hiredate, sal, deptno
-FROM emp
+FROM EMP
 WHERE EXISTS ( SELECT empno
-               FROM emp
+               FROM EMP
                WHERE comm IS NOT NULL );
 
 
 -- # 다중컬럼 
 SELECT deptno, empno, ename,  sal
-FROM emp
+FROM EMP
 WHERE (deptno, sal ) IN ( SELECT deptno, MAX(sal)
-                          FROM emp
+                          FROM EMP
                           GROUP BY deptno);
 
 
 -- # 스칼라 서브쿼리
 SELECT ename, sal,       
-      (SELECT ROUND(AVG(sal)) FROM emp) AS avg_salary 
-FROM emp;
+      (SELECT ROUND(AVG(sal)) FROM EMP) AS avg_salary 
+FROM EMP;
 
 -- # 인라인 뷰 서브쿼리
 SELECT e.deptno, total_sum, total_avg, cnt
 FROM ( SELECT deptno, SUM(sal) total_sum, ROUND(AVG(sal)) total_avg,
               COUNT(*) cnt
-       FROM emp
-       GROUP BY deptno ) e JOIN dept d ON e.deptno = d.deptno;
+       FROM EMP
+       GROUP BY deptno ) e JOIN DEPT d ON e.deptno = d.deptno;
 
 
 select  e.deptno, sum(sal), ROUND(avg(sal)), count(*)
-	from emp e join dept d on e.deptno = d.deptno  
+	from EMP e join DEPT d on e.deptno = d.deptno  
 	group by deptno;
 
 
  -- ////////////////////////////////////////////////////
 -- ///////  DML  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/sql-data-manipulation-statements.html
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/sql-transactional-statements.html
 
 -- auto commit 확인
  show variables like 'autocommit%';
@@ -695,18 +693,18 @@ select  e.deptno, sum(sal), ROUND(avg(sal)), count(*)
 set autocommit=false;         
 
 -- # INSERT 문
-DESC dept; 
+DESC DEPT; 
 
-INSERT INTO dept (deptno, dname, loc )
+INSERT INTO DEPT (deptno, dname, loc )
 VALUES (90, '인사과','서울');
 
-INSERT INTO dept (deptno, dname ) # loc 컬럼에 null 저장
+INSERT INTO DEPT (deptno, dname ) # loc 컬럼에 null 저장
 VALUES (91, '인사과');
 
-INSERT INTO dept (loc, dname, deptno )
+INSERT INTO DEPT (loc, dname, deptno )
 VALUES ('서울', '인사과', 80);
 
-INSERT INTO dept 
+INSERT INTO DEPT 
 VALUES (70, '인사과','서울');
 
 -- # 다중행 저장 
@@ -714,30 +712,30 @@ VALUES (70, '인사과','서울');
 -- # CTAS 이용한 테이블 생성
 CREATE TABLE copy_emp
 AS
-SELECT empno, ename, sal FROM emp
+SELECT empno, ename, sal FROM EMP
 WHERE 1=2;
 
 INSERT INTO copy_emp (empno, ename, sal)
 SELECT empno, ename, sal 
-FROM emp;
+FROM EMP;
 
 INSERT INTO copy_emp (empno, ename, sal)
 VALUES (71, '홍길동',800), (72, '이순신',900), (73, '유관순',950);
 
 
 -- # UPDATE 문
-UPDATE dept
+UPDATE DEPT
 SET dname ='경리과', loc='부산'
 WHERE deptno = 90;
 
-UPDATE emp
+UPDATE EMP
 SET sal = 1000
 ORDER BY sal DESC
 LIMIT 2;
 
 -- # DELETE 문
 
-DELETE FROM dept
+DELETE FROM DEPT
 WHERE deptno = 90;
 
 DELETE FROM copy_emp
@@ -746,16 +744,15 @@ ORDER BY empno desc
 LIMIT  1;
 
 -- # MERGE 문 (UPSERT)
-INSERT INTO dept (deptno, dname, loc )
-VALUES (90, '인사과','서울’);
+INSERT INTO DEPT (deptno, dname, loc )
+VALUES (90, '인사과','서울');
 
-INSERT INTO dept (deptno, dname, loc )
+INSERT INTO DEPT (deptno, dname, loc )
 VALUES (90, '인사과','서울') ON DUPLICATE KEY UPDATE loc='제주';
 
 
  -- ////////////////////////////////////////////////////
 -- ///////  DDL  실습//////
--- https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/sql-data-definition-statements.html
 
 
 CREATE TABLE IF NOT EXISTS  dept_2
