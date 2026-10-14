@@ -45,7 +45,7 @@ FROM emp;
  -- 필요시  "별칭" 사용
 
 SELECT empno AS "사원 번호" , ename AS 성명, sal 급여 
-FROM emp
+FROM emp;
 
 SELECT empno AS "사 번", ename AS "성명",  sal "급여" , sal * 12  as "연봉"
 FROM emp;
@@ -84,7 +84,7 @@ WHERE sal <= 1000;
 
 SELECT empno, ename, job, deptno
 FROM emp
-WHERE job = 'salesman'
+WHERE job = 'salesman';
 
 SELECT empno, ename, job, deptno , sal, hiredate 
 FROM emp 
