@@ -1,0 +1,459 @@
+##############
+Git
+#############
+
+1. 환경설정 및 문서
+
+ https://git-scm.com/
+
+ https://git-scm.com/docs
+
+
+2. Git이 사용하는 기본 텍스트 편집기 설정
+
+  . 
+
+
+3. 전역 사용자 등록
+
+   -git bash 에서 작업
+   -------------------------
+    ls      # 디렉터리 목록보기
+    ls -al  # 자세하게 디렉터리 목록보기
+
+    clear   # 화면 지우기
+
+    pwd     # 현재 위치
+    
+    mkdir 디렉터리명  #디렉터리 생성
+
+    cd  디렉터리명   #디렉터리 변경 , 몇글자만 입력하고 tab 활용
+    cd  ..        #상위 디렉터리로 변경
+
+    rm -rf 디렉터리명  # 디렉터리 강제 삭제
+    rm 파일명 파일명2 ..        # 파일 삭제
+
+    touch 파일명     # 파일생성
+
+    echo 문자열      # 문자열이 콘솔에 출력
+    
+    echo 문자열 >> 파일명     # 콘솔에 출력되는 문자열을 파일에 추가(append, 새로운 줄에 추가됨), redirection 기능
+
+    echo 문자열 >  파일명  # 콘솔에 출력되는 문자열을 파일에 덮어쓰기
+
+    cat 파일명   # 파일내용 보기
+   -------------------------
+
+    # 전역 사용자 설정
+   $ git config --global user.name "inky4832"
+   $ git config --global user.email "inky4832@daum.net"   # 반드시 github 계정과 일치
+
+   c:\사용자\계정명\ .gitconfig 파일에 저장됨.
+        [core]
+	   editor = code --wait
+	[user]
+		name = inky4832
+		email = inky4832@daum.net
+
+  
+    # 전역 사용자 확인
+      
+      $ git config user.name
+      $ git config user.email
+
+   # 전역 사용자 삭제
+    
+   $ git config --global --unset user.name "inky4832"
+   $ git config --global --unset user.email "inky4832@daum.net"
+-----------------------------------------------------------------------------------
+##############
+ 로컬 저장소 생성 및 관리
+#############
+
+1. 저장소 생성
+ 
+  명령어: git init
+  
+  실습순서:
+    
+    $ mkdir git_tutorial
+    $ cd git_tutorial
+    $ git init   
+--------------------------------------------------------------------------------
+2. 저장소 상태확인
+
+    $ git status 
+ 
+--------------------------------------------------------------------------------
+3. 파일 생성 및 저장소 상태확인
+   
+   $ touch hello.txt    <== hello 문자열 입력하고 저장.
+
+   $ git status
+ 
+--------------------------------------------------------------------------------
+4. 추적시킬 파일 등록 ( 스테이징, 스테이지에 올린다. index 등록한다 라고 함 )
+
+   실습:
+
+     $ git add hello.txt  
+     $ git status
+      
+     #unstage
+       $ git rm --cached hello.txt
+       $ git status
+
+--------------------------------------------------------------------------------
+5. 버전 생성
+
+   실습:
+    
+     $ git commit -m "first commit"
+     $ git status
+
+     $ echo "hello2" >> hello.txt   # 내용추가
+     $ git status
+
+     $ git add hello.txt
+     $ git status
+     
+     $ git commit -m "second commit"	
+     $ git status
+
+
+--------------------------------------------------------------------------------
+6. 버전 확인
+
+   $ git log
+   $ git log --oneline  # 한줄로 출력
+   $ git log -p    # 변경 내용 출력 , 빠져나오기: q, Pagedown, 화살표 키
+   $ git log --relative-date  # 현재 시간 기준으로 commit 경과된 시간 출력
+
+-----------------------------------------------------------------------------------
+7.  add와 commit 한꺼번에
+ 
+  
+   실습:
+   
+      $ echo "hello3" >> hello.txt   # 내용추가
+
+      $ git commit -am "third commit"
+
+      $ git log --oneline
+-----------------------------------------------------------------------------------
+##############
+ 변경사항 비교
+#############
+
+1. 변경사항 비교
+
+   실습:
+      $ mkdir git_diff
+      $ cd git_diff
+      $ git init   #.git 폴더 생성
+      $ touch hello.txt
+      $ echo "hello" >> hello.txt
+      $ git add hello.txt
+      $ git commit -m "first commit"
+
+      # 작업디렉터리 수정
+      $ echo "hello2" >> hello.txt
+
+      # 작업디렉터리와 저장소비교
+      $ git diff
+
+      # 스테이지와 저장소 비교
+      $ git add hello.txt
+      $ git diff --staged
+      $ git commit -m "second commit"
+
+      # 해시값 비교
+      $ git log --oneline
+      $ git diff b3ff9e5 5d57cb4 
+
+     # HEAD 비교
+      $ git diff  HEAD^  HEAD
+      ------------------------------------------------
+-----------------------------------------------------------------------------------
+##############
+ 불필요한 파일 및 폴더 제외
+#############
+1. 불필요한 파일 제외
+
+   실습: 
+     $ mkdir tmp     
+     $ touch Test.java
+     $ touch secrets.txt
+
+     $ git add .
+
+     $ touch .gitignore
+
+     $ echo "secrets.txt" >> .gitignore
+     
+     $ git status 
+
+--------------------------------------------------------------------------
+##############
+ 작업 되돌리기
+#############
+############################
+ 작업 되돌리기1 - git Restore
+###########################
+
+1. git restore 실습
+
+실습:
+ $ mkdir git_restore
+$ cd git_restore
+$ git init
+$ touch hello.txt   ( 반드시 tracked 파일이어야  revert가 가능 )
+$ echo "hello" >> hello.txt
+$ git add hello.txt
+$ git commit -m 'first commit’
+$ git status
+
+$ 파일 수정만 ( add 안함 )
+$ git restore hello.txt  (작업트리 수정사항 되돌리기 )
+$ git status
+--------------------------------------------------------------------------
+2. git restore --staged 실습
+
+$ touch a.txt b.txt  c.txt
+
+$ echo "hello" >> a.txt
+$ echo "hello" >> b.txt
+$ echo "hello" >> c.txt
+
+$ git add .      (  commit  안함  )
+$ git status     
+$ git restore --staged c.txt ( git add 취소하기 )
+$ git status     (c.txt 파일은 더 이상 추적되지 않음)
+
+---------------------------------------------------------------------------
+############################
+ 작업 되돌리기2 - git reset 
+###########################
+2. git reset --soft 실습
+
+   실습:
+     $ mkdir git_reset
+     $ cd git_reset
+     $ git init
+     $ touch hello.txt
+     $ echo "hello" >> hello.txt
+     $ git add hello.txt
+     $ git commit -m "hello commit"
+
+     $ echo "hello2" >> hello.txt
+     $ git commit -am "hello2 commit"
+
+     $ echo "hello3" >> hello.txt
+     $ git commit -am "hello3 commit"
+     $ git log --oneline
+
+     # 가장 최신 커밋 취소하기 ( "hello3 commit" 취소 )
+     $ git reset --soft HEAD^  
+     $ git log --oneline
+     $ git status 
+
+----------------------------------------------------------------------
+3. git reset --mixed 실습
+
+     $ mkdir git_reset2
+     $ cd git_reset2
+     $ git init
+     $ touch hello.txt
+     $ echo "hello" >> hello.txt
+     $ git add hello.txt
+     $ git commit -m "hello commit"
+
+     $ echo "hello2" >> hello.txt
+     $ git commit -am "hello2 commit"
+
+     $ echo "hello3" >> hello.txt
+     $ git commit -am "hello3 commit"
+     $ git log --oneline
+     $ git status
+
+    # 가장 최신 커밋 취소하기 ( "hello3 commit" 취소 )
+     $ git reset --mixed HEAD^ 
+     $ git log --oneline
+     $ git status
+
+----------------------------------------------------------------------
+4. git reset --hard 실습
+
+     $ mkdir git_reset3
+     $ cd git_reset3
+     $ git init
+     $ touch hello.txt
+     $ echo "hello" >> hello.txt
+     $ git add hello.txt
+     $ git commit -m "hello commit"
+
+     $ echo "hello2" >> hello.txt
+     $ git commit -am "hello2 commit"
+
+     $ echo "hello3" >> hello.txt
+     $ git commit -am "hello3 commit"
+     $ git log --oneline
+     $ git status
+
+    # 가장 최신 커밋 취소하기 ( "hello3 commit" 취소 )
+     $ git reset --hard HEAD^ 
+     $ git log --oneline
+     $ git status
+    
+     
+ ---------------------------------------------------------
+ ############################
+ 작업 되돌리기3 - git revert
+###########################
+
+    실습:
+ 
+     $ mkdir git_revert
+     $ cd git_revert
+     $ git init
+     $ touch hello.txt
+     $ echo "hello" >> hello.txt
+     $ git add hello.txt
+     $ git commit -m "hello commit"
+     $ echo "hello2" >> hello.txt
+     $ git commit -am "hello2 commit"
+     $ echo "hello3" >> hello.txt
+     $ git commit -am "hello3 commit"
+     $ git log --oneline
+       66fd4c1 (HEAD -> main) hello3 commit
+       322bcb4 hello2 commit
+       b524bf8 hello commit
+     $ git status
+
+     $ git revert 322bcb4    # hello2 commit으로 작업 되돌리기
+     # 충돌발생 hello.txt 문서 수정
+
+     $ git add .                     # git add 선택하면 hello.txt 유지
+     $ git revert --continue .    # vsc 열림. 커밋 메시지 작성하고 파일저장.
+
+     $ git status
+     $ git log --oneline
+
+
+------------------------------------------------------------------------
+##############
+브랜치
+#############
+
+   실습:
+     $ mkdir git_branch
+     $ cd git_branch
+     $ git init
+     $ touch hello.txt
+     $ echo "hello" >> hello.txt
+     $ git add .
+     $ git commit -m "hello commit"
+     $ echo "hello2" >> hello.txt
+     $ git commit -am "hello2 commit"
+     $ git log --oneline
+     $ git branch          # 브랜치 목록
+
+
+     $ git branch hotfix   # hotfix 이름의 새로운 브랜치 생성
+	
+     # main 브랜치에서 hotfix로 변경
+     $ git switch hotfix
+        git checkout hotfix
+
+     # hotfix 브랜치에서 hello.txt 파일 변경
+     $ echo "hello3 hotfix" >> hello.txt
+     $ git commit -am "hello3 hotfix commit"
+
+     $ git log --oneline
+
+     # main 기준으로 hotfix 차이점 출력
+     $ git log main..hotfix
+
+
+     # main에서 작업. main에 브랜치변경작업을 병합
+     $ git switch main 
+     $ git merge  hotfix
+     $ git branch -D hotfix  <== 병합후에는 hotfix 브랜치 삭제
+-----------------------------------------------------------------------------------
+##############
+브랜치 병합
+#############
+3. 병합 종류
+
+ 1) Fast-forward 병합
+
+      실습:
+        $ mkdir git_merge
+        $ cd git_merge
+	$ git init
+       
+       #main작업
+        $ touch hello.txt
+	$ echo "hello" >> hello.txt
+	$ git add .
+	$ git commit -m "hello commit" 
+	$ git branch hotfix
+	$ git switch hotfix
+
+       #hotfix작업
+	 $ echo "hello2" >> hello.txt
+	 $ git commit -am "hello2 commit" 
+	 $ git switch main
+	  
+       #main작업
+         $ git merge hotfix  # Fast-forward 메시지 확인
+		
+ ----------------------------------------------------------------------------------
+  2) 병합커밋
+    
+    # 현재는 main과 hotfix간의 버전이 똑같음.
+     실습:
+       #main작업
+        $ touch world.txt
+	$ git add .
+	$ git commit -m "world commit"
+	$ git switch hotfix
+
+      #hotfix작업
+	 $ touch happy.txt
+         $ git add .
+  	 $ git commit -m "happy commit"
+	 $ git switch main
+
+       #main작업
+         $ git merge hotfix   # 커밋해야되기 때문에 VSC 오픈되고 커밋메시지 작성후 close하면 병합커밋이 완료됨
+	   Merge made by the 'ort' strategy.
+
+ ----------------------------------------------------------------------------------
+
+  3) 병합충돌
+
+       # 현재는 main과 hotfix의 hello.txt 파일내용이 동일하다.
+      
+      실습:
+
+      #main작업
+	$ echo "hello main" >> hello.txt
+	$ git add .
+	$ git commit -m "main commit" 
+        $ cat hello.txt
+	$ git switch hotfix  
+       
+      #hotfix작업
+	$ echo "hello hotfix" >> hello.txt
+	$ git commit -am "hotfix commit"
+	$ git switch main
+
+      # main 에서 hotfix 병합
+ 	$ git merge hotfix       # 충돌발생, VCS열고 충돌직접 해결(코드수정)
+	                                  코드수정이 되었기 때문에 커밋해야 됨.
+
+        $ git commit -am "final commit"
+	
+        $ git branch -D hotfix  <== 병합후에는 hotfix 브랜치 삭제
+
