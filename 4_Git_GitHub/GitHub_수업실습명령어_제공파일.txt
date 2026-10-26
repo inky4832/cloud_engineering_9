@@ -1,0 +1,171 @@
+Github 정리
+
+################################
+ 원격 저장소 생성 
+################################
+
+실습:
+
+  가. 회원가입 및 로그인 
+  나. 상단의 repositories > New 선택 > 이름:  study
+
+      a. 로컬저장소가 아직 없는 경우
+               echo "# github_test" >> README.md
+		git init
+		git add README.md
+		git commit -m "first commit"
+		git branch -M main # 브랜치이름 변경
+		git remote add origin https://github.com/inky4832/study.git
+		git push -u origin main
+
+      b. 로컬저장소가 있는 경우
+               git remote add origin https://github.com/inky4832/study.git
+		git branch -M main
+		git push -u origin main
+
+
+--------------------------------------------------------------------------------------
+################################
+  clone  
+################################
+
+ 실습:
+
+   가. c:\github_study 폴더 생성
+   나. VSC 터미널에서 git clone 명령어 실행 
+
+     $ git clone https://github.com/inky4832/study.git
+
+   다. 원격 저장소 연결상태 확인
+   
+     $ git  remote
+     $ git  remote  -v 
+
+   라. 원격 저장소 연결 종료
+   
+     $ git  remote remove origin
+     $ git  remote rm origin
+	
+   마. 로컬 저장소와  원격 저장소 연결
+
+      $ git  remote add  origin  https://github.com/inky4832/study.git
+
+
+################################
+  로컬저장소 main 브랜치를 원격 저장소에 올리기  
+################################
+
+ 실습:
+ 
+ 1. token 값 얻기 ( 비번대신 사용 )
+   
+       Token 값 저장:  ghp_zdZh0~
+
+
+ 2.  윈도우 자격 증명 관리 > github.com 제거하기 
+
+ 3. 로컬 커밋 내역을 원격 저장소에 올리기
+ 
+# 로컬 저장소 커밋 
+$ touch hello.txt
+$ echo "hello" >> hello.txt
+$ cat hello.txt
+   hello
+$ git add hello.txt
+$ git commit -m “hello commit”
+
+# 원격 저장소 연결 및 확인
+$ git remote add origin https://github.com/inky4832/study.git
+$ git remote -v
+
+# 원격 저장소에 push
+$ git push origin main
+
+ 이후에 Token 입력하고 Sign in 클릭하기 
+
+
+  4. 원격 저장소에서 push 확인하기
+
+  5.  로컬에서 커밋 정보보기
+$ git log
+ 
+  
+  6.  이후에 한번 더  hello.txt 파일 수정하고  "hello2 commit" 생성하고 push 한다.
+ $ echo "hello2" >> hello.txt
+$ cat hello.txt
+   hello
+   hello2
+$ git add hello.txt
+$ git commit -m “hello2 commit”
+
+
+---------------------------------------------------------------------------------------
+################################
+  로컬저장소 hotfix 브랜치를 원격 저장소에 올리기  
+################################
+
+1. hotfix 브랜치 생성 및 커밋하기
+
+$ git branch hotfix
+$ git switch hotfix
+$ git branch
+$ echo "hello3 hotfix" >> hello.txt
+$ cat hello.txt
+  hello1
+  hello2 
+  hello3 hotfix
+$ git commit ?am “hello3 hotfix commit”
+
+#원격 저장소 연결 및 확인
+$ git remote add origin https://github.com/inky4832/study.git
+$ git remote -v
+
+2. hotfix 브랜치를 원격 저장소에 push
+
+#hotfix 브랜치 push 하기
+$ git push origin hotfix
+
+
+3. 원격 저장소에서 push 확인하기
+
+4.  로컬에서 커밋 정보보기
+$ git log --oneline
+
+
+################################
+  원격 저장소에서 hotfix 병합하기
+( Pull Requests 이용)
+################################
+
+
+
+################################
+원격 저장소의 main 브랜치를 
+로컬 저장소로 가져와서 병합하기
+################################
+
+ 1.  fetch + merge
+
+   # 현재 로컬 저장소 main 커밋 상태 확인
+   $ git log --oneline
+   $ cat hello.txt
+
+    # 현재 원격 저장소 main 커밋 상태 확인
+   $ git log --oneline origin/main
+    
+   $ git fetch oring                          # 원격의 최신 정보를 로컬로 가져와서 반영 (  merge 안됨 )
+   $ git log --oneline origin/main      # 로컬에 반영된 원격 최신정보 출력
+
+   # 로컬 저장소와 원격 저장소 병합
+   $ git merge origin/main                 
+
+--------------------------------------------------------------------------
+
+  2. pull (fetch + merge)
+
+   $ git pull  origin  main
+
+
+################################
+git 협업 워크 플로우 
+################################
