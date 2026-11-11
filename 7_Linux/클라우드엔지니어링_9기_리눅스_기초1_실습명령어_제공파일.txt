@@ -1,0 +1,603 @@
+///////////////////////////
+1 장  리눅스 기초
+//////////////////////////////
+
+
+실습1> 모든 응용 프로그램 업데이트 
+   
+ sudo apt update
+ sudo apt full-upgrade 
+
+------------------------------------------------------------------------------------------------
+실습2> 인터넷 정상동작 확인
+
+  ping  -c 3  8.8.8.8
+
+ ------------------------------------------------------------------------------------------------  
+실습3> ubuntu에 SSH (Secure Shell) 설치
+	  
+  sudo apt install openssh-server 
+  sudo systemctl status ssh   # server 상태 확인  
+  sudo systemctl start ssh    # server 시작  
+  sudo systemctl enable ssh   # 재부팅시 자동 실행
+	
+------------------------------------------------------------------------------------------------
+실습4> pem (Privacy Enhanced Mail) 파일 이용하여 비번 입력없이 접근하기.
+	       
+1. 공개키(public key) 와 개인키 (private key) 생성하기 : 비대칭키 
+   ssh-keygen  -q  -N  ""  -f    ubuntu_user1_key.pem
+			
+2. 공개키의 내용을  authorized_keys 파일에 기록한다
+   cat   ubuntu_user1_key.pem.pub >> ~/.ssh/authorized_keys
+
+3. 권한 낮추기 (권한이 너무 많으면 보안이슈 때문에 실행이 안됨. 따라서 낮춰야 됨)
+   chmod 600 ~/.ssh/authorized_keys
+
+4.  이후  MobaXterm 또는 VSC에서 접속
+------------------------------------------------------------------------------------------------------------
+
+실습5> 프롬프트와 홈디렉터리
+
+$ pwd
+$ cd ~
+$ pwd
+
+$ sudo su
+$ pwd
+$ exit
+
+$ sudo su -
+$ pwd
+$ exit
+------------------------------------------------------------------------------------------------------	 
+
+실습6> 명령어 도움말 지원
+
+$ man ls
+$ ls --help
+
+
+------------------------------------------------------------------------------------------------------	
+실습7> 명령어  history
+
+$ history
+$ history -c 
+
+///////////////////////////
+3 장  리눅스 파일 시스템
+//////////////////////////////
+------------------------------------------------------------------------------------------------------	
+실습8> 파일 종류 확인
+
+$ file  /etc/passwd
+$ file  /etc
+$ file  /usr/bin/ls
+
+$ ls -aF  /etc
+$ ls -al /etc/resolv.conf
+
+
+#표준입력/표준출력/표준에러
+			  
+$ file /dev/stdin         # 0번 ( 표준입력) 자바의 System.in 동일
+$ file /dev/stdout       # 1번 (표준출력)  자바의 System.out.println 동일
+$ file /dev/stderr        # 2번 (표준에러)  자바의 System.err.println 동일
+		
+------------------------------------------------------------------------------------------------------	
+실습9> 디렉터리 계층구조 쉽게 관리가능한 패키지 설치
+	  
+  $ sudo apt update & sudo apt install tree
+		
+  $ tree 
+  $ tree -d            # 디렉터리만 출력                
+  $ tree -d  /etc    #  /etc 내 디렉터리만 출력됨.
+  $ tree  -f   /etc      # 절대경로로 출력됨.  앞에  /etc가 모두 붙음. 	 
+
+---------------------------------------------------------
+실습 10> 특정 디렉터리 이동하기
+	  
+ $ cd  /Documents
+ $ cd  ./Documents
+			
+---------------------------------------------------------
+실습 11> 홈 디렉터리로 이동하기
+	  
+ $ cd  /home/usr1
+ $ cd  ~
+ $ cd  
+
+			
+ ---------------------------------------------------------
+실습 12> 디렉터리 내용 보기
+
+$ ls  /etc    /tmp
+$ ls   -l     /etc 
+$ ls   -ld   /etc
+$ ls   -al    /etc
+$ ls   -lR   /etc
+	
+-------------------------------------------------------------
+실습 13> 파일 내용 보기1 ( 데이터가 적을 때 사용 )
+
+$ cat   /var/log/auth/log
+$ cat   /etc/passwd   /etc/group
+$ cat  -n  /etc/passwd
+$ cat   /etc/host  >  my_host.txt
+
+	
+-------------------------------------------------------------
+실습 14> 파일 내용 보기2 (*******************)
+	
+$ less    /etc/services
+
+-------------------------------------------------------------
+실습 15 > 파일 뒷부분 내용 보기
+	 
+$ tail    /etc/passwd
+$ tail  -n  4  /etc/passwd
+$ tail  +2   /etc/passwd
+
+-------------------------------------------------------------
+실습 16 > 파일 앞부분 내용 보기
+	 
+$ head  /etc/passwd
+$ head -n  4  /etc/passwd
+				 
+-------------------------------------------------------------
+실습 17 >주기적으로 반복 실행될 때 변경사항을 highlight로 확인하기 
+	  
+$ watch ls 
+$ watch -n 1  -d  ifconfig  
+$ watch -n 1  cat hello.txt
+				 
+-------------------------------------------------------------
+실습 18>  파일 생성
+	  
+$ touch  report.txt
+$ stat report.txt            #  통계정보에서 타임스탬프를 확인
+$ touch  report.txt        #  생성시간 변경 확인
+$ touch logs    
+
+-------------------------------------------------------------
+실습 19>  디렉터리 생성
+	  
+$ mkdir  main   sub
+$ mkdir  -p   first/second/third	
+$ tree first 
+		
+$ mkdir -v logs2      # 상세 출력 모드
+
+-------------------------------------------------------------
+실습 20> 파일 및 디렉터리 복사
+	  
+$ cp  /etc/passwd   ./users.txt             # users.txt 파일이 없으면 생성, 있으면 덮어쓰기
+$ cp   hello.txt   users.txt     first/        # 있는 파일만 복사, 없는 파일은 warning 출력
+$ cp  -r  main/  hello.txt      first/        # 디렉터리도 복사
+
+$  sudo cp     userts.txt  u.txt        # 복사된 u.txt의 소유자는 root가 됨. 
+$  sudo cp -p userts.txt  u2.txt      # 복사된 u.txt의 소유자는 원래 소유자인 user1 임. preserve 됨
+	  
+-------------------------------------------------------------
+실습 21> 파일 및 디렉터리 이동하기 및 이름변경
+
+
+$ mkdir -p dir1/dir2
+$ touch dir1/a.txt  dir1/dir2/b.txt  c.txt
+$ tree dir1
+
+$  mv  dir1/dir2/b.txt  dir1/ 
+$  mv c.txt  dir1/a.txt  dir1/b.txt   dir1/dir2/  
+$  tree dir1
+$ mv    dir1/dir2/*.txt  dir1/     # * 와일드카드 사용가능
+
+$ rm -rf  dir1	
+$ mkdir dir1/dir2/dir3 
+$ tree dir1
+$ mv dir1/dir2/dir3   dir1/      # dir3 디렉터리를 dir1 디렉터리로 옮기기
+$ tree dir1
+
+
+$ mkdir backup
+$ touch a.txt  b.txt
+
+$ mv  a.txt   backup/
+$ mv  a.txt    new_b.txt             # 이름변경
+$ mv  dir1/   dir2/                   #  이름변경
+$ mv  a.txt  b.txt   backup/
+
+				 
+-------------------------------------------------------------
+실습 22>  파일 및 디렉터리 삭제
+
+$ tree  dir1   #  트리구조 확인후 임의파일 및 디렉터리 삭제하기
+
+$ rm     dir1/a.txt  dir2/b.txt
+$ rm -i  dir1/b.txt
+$ rm  -rf  dir1/
+$ rm  -ri   c.txt   dir1/ 					  
+
+
+-------------------------------------------------------------
+실습 23> 파일 및 디렉터리 찾기.
+
+$ mkdir projects
+$ touch projects/report.txt
+$ touch projects/todo.txt
+$ touch projects/error.log
+$ touch projects/alert.log
+
+$ echo "todo" >> projects/todo.txt
+$ echo "error" >> projects/error.log
+$ echo "alert" >> projects/alert.log
+$ tree projects
+
+$ find .  -name todo.txt  
+$ find .  -name TODO.txt       # 못 찾음
+$  find .  -iname TODO.txt      # 찾음
+
+$ find . -name todo*           #  "todo*" 가능
+
+$ find . -name report.txt -delete  # 파일 삭제
+
+$ sudo find /etc -name passwd      # 권한이 없는 경우 sudo 지정
+
+$ sudo find /etc -name passwd -ls   #  find 후 ls 실행
+
+$ find /etc -type d         # /etc 밑 디렉터리만 출력
+$ find /etc -type f         # /etc 밑 파일만 출력 
+
+$ find projects -name "*.log" -exec cat {} \;           # \와 ; 필수
+$ find projects -name "*.log" -exec echo rm {} \;    # 삭제전에 echo로 안전하게 확인후 삭제 권장
+$ find projects -name "*.log" -exec rm {} \;           # {} 찾은파일하나씩, \는 명령종료의미
+
+		 /////////////////////////////////////////////////////
+   
+-------------------------------------------------------------
+실습 24> 파일내용 검색하기 
+	  
+
+      
+#작업 준비:
+$  cat << EOF > app.log
+			INFO: server started
+			INFO: user login
+			ERROR: database connection failed
+			WARN: memory usage high
+			INFO: request completed
+			ERROR: timeout occurred
+			DEBUG: internal value
+			INFO: user logout
+			EOF
+
+ # 검색하기
+$ grep "ERROR" app.log   # ERROR 라인만 출력
+$ grep  ERROR app.log    
+$ grep -n ERROR app.log    # 줄번호
+$ grep -c ERROR app.log    # 갯수
+$ grep -v ERROR app.log    # ERROR가 아닌것
+$ grep -E "ERROR|WARN" app.log    # 여러 조건
+$ grep -i  error app.log    # 대소문자 무시해서 찾음.
+$ grep   error app.log      # 못찾음                   
+$ grep -n -E "ERROR|WARN" app.log    # 여러 옵션 조합 가능.
+
+$ grep 127.0.0.1 /etc     # /etc에서만 찾음. 디렉터리 오류 발생
+$ grep -r 127.0.0.1 /etc  # /etc 하위포함에서 찾음. 검색가능
+			
+
+-------------------------------------------------------------
+실습 25> inode
+
+$   ls -i
+$  ls -il /etc   
+$  stat  app.log                # 더 자세한 inde 정보보기	
+$  find . -inum 1205183     # 지정된 indoe에 해당하는 파일 검색
+
+
+-------------------------------------------------------------
+실습 26> 하드링크
+		    
+
+$ echo hello > a.txt
+$ ln a.txt  b.txt
+$ ln a.txt temp/c.txt
+$ ls -il
+
+$ echo world >> a.txt
+$ cat a.txt	
+$ cat b.txt     # a.txt와 동일한 내용	
+
+$ rm a.txt     # 파일삭제
+$ cat b.txt    # 파일 존재
+					 
+-------------------------------------------------------------
+실습 27>  소프트 링크 (Soft Links)
+
+# 파일 실습	 
+$ echo hello > a.txt
+$ ln -s a.txt c.txt
+$ cat c.txt
+$ stat a.txt
+$ ls -il     # inode가 다름.
+$ rm. a.txt    # 원본 삭제시 링크깨짐
+$ ls -il       # 링크가 깨져서 빨강색으로 보임
+$ rm c.txt
+
+# 디렉터리 실습		
+$ mkdir temp
+$ touch temp/xyz.txt
+
+$ ln -s temp temp2  # 디렉터리 soft link 가능
+$ ls temp
+$ ls temp2
+				
+	 
+-------------------------------------------------------------
+실습 28>   파일 묶음 및 압축하기
+	 
+ 
+$ mkdir testdir
+$ echo hello > testdir/hello.txt
+$ echo world > testdir/world.txt
+$ echo error > testdir/error.log
+
+
+$ tar -czvf test.tar.gz  testdir/
+$ ls
+
+$ mkdir temp
+$ tar -xzvf test.tar.gz   -C  ./temp
+
+# 특정 파일 제외
+$ tar --exclude='*.log'  -czvf test2.tar.gz  testdir         # *.log 제외				 
+				 
+-------------------------------------------------------------
+실습 29>   파이프 (Pipes )
+	 
+$ ls -lhs  /etc   | head  -n 20
+
+$ cat -n /var/log/auth.log   |  grep   "authentication failure" 
+$ cat -n /var/log/auth.log   |  grep   "authentication failure"  | wc -l
+				
+
+-------------------------------------------------------------
+실습 30>   리다이렉션
+	 
+$ ls > file.txt
+$ ls >> file.txt
+$ ifconfig >> ifconfit.txt
+$ ifconfig | grep ether
+$ ifconfig | grep ether > MAC.txt
+
+$ wc -l  < file.txt
+
+$ touch  text.txt
+$ ls text.txt  wrong.txt  # wrong.txt 파일은 없기 때문에 오류 발생됨
+$ ls text.txt  wrong.txt > out.txt           # 표준에러는 화면에 그대로 출력됨.
+				  			 
+$ ls text.txt  wrong.txt  2>  error.txt      # 표준출력는 화면에 그대로 출력됨.
+$ ls text.txt  wrong.txt > out.txt  2> error.txt   # 표준출력 및 표준에러를 모두 파일로 분리
+
+
+-------------------------------------------------------------
+실습 31>   vi 편집기
+	
+#  vim 설치. ( vi improved )
+$ sudo apt install vim         
+$ vimtutor                # vim에서 제공하는 샘플도구 ( 저장해도 리셋됨 )
+
+
+-------------------------------------------------------------
+실습 32>  사용자 관리 및 그룹
+	 
+$ cat /etc/passwd           # 계정 정보 보기
+$ sudo cat /etc/shadow   # 비번 정보 보기
+
+$ cat /etc/group
+$ id user1                # Primary Group 보기
+$ groups user1         # Secondary Group 보기
+				
+
+-------------------------------------------------------------
+실습 33>  사용자 생성 및 삭제/비번 설정
+		
+$ sudo useradd -m user2
+$ sudo passwd user2
+$ ls -ld  /home/user2
+$ grep user2   /etc/passwd
+
+$ su user2  # switch user
+$ cd
+$ exit
+
+$ sudo userdel -r user2
+
+# 그룹생성 실습
+$ sudo groupadd dev   # 먼저 그룹생성
+$ sudo useradd -m - g dev user3
+$ sudo passwd user3		    
+$ sudo userdel -r user3
+
+-------------------------------------------------------------
+실습 34> 파일 접근 권한 관리
+	 
+# 기호모드 이용
+$ echo "practice" > file3.txt			
+$ chmod u+x file3.txt  # 소유자에게 실행 권한 추가
+$ ls -l file3.txt
+			
+$ chmod g+w file3.txt   # 그룹 쓰기 권한 추가
+$ ls -l file3.txt
+			
+$ chmod o-r file3.txt  # others 읽기 권한 제거
+$ ls -l file3.txt
+
+$ chmod a+x file3.txt  # 모든 사용자에게 실행 권한 추가
+$ ls -l file3.txt
+
+			   
+# 숫자 모드 이용.
+
+$ echo "sample" > file2.txt
+
+$ chmod 644 file2.txt
+$ ls -l file2.txt
+
+$ chmod 600 file2.txt
+$ ls -l file2.txt
+
+$ chmod 755 file2.txt
+$ ls -l file2.txt
+
+# 실행 파일 실습
+# 스크립트 파일 생성
+$ cat << EOF  > run.sh 
+  #!/bin/bash
+  echo "hello shell"
+  EOF
+
+$ ls -l run.sh   # 권한 확인 
+$ chmod +x run.sh  # 실행 권한 추가
+$ ls -l run.sh   # 권한 확인 
+			
+$  ./run.sh     # 실행
+
+
+
+# -R  디렉터리 권한 실습
+		
+$ mkdir -p  one/two/three
+$ ls -al one
+$ chmod 755 one      #  one 디렉터리만 755로 바뀜
+$ ls -al one
+$ chmod -R 755 one    #  -R 옵션 지정하면  재귀적으로 모두 755로 바뀜.
+$  ls -al one
+
+
+
+-------------------------------------------------------------
+실습 35>  파일 소유자 관리
+
+$  chown  root  test.txt                   # 소유자를 root로 변경
+$  sudo  chown  :root  test.txt                  # 소유 그룹을 root 로 변경
+$  sudo  chown  user1:user1  test.txt      # 소유자 및 소유 그룹을 user1 로 변경
+
+$  sudo  chown  -R  root:root  one/   # root 하위 디렉터리까지 포함
+
+------------------------------------------------------------------------------
+///////////////////////////
+ 5장  프로세스
+//////////////////////////////
+
+ -------------------------------------------------------------
+실습 36>  프로세스 정보 보기
+ 	
+$ ps                     # 현재 터미널에서 실행된 프로세스 목록 출력.
+$ ps -ef | wc -l       # 실행중인 프로세스 갯수
+
+# forground 프로세스 실행 
+		   
+$ ps             # 기본 상태 확인
+$ sleep 10    # foreground 실행
+			
+#  background 프로세스 실행 및 확인 그리고 종료
+			
+$ sleep 10 &  # background 실행
+$ jobs        # 백그라운드/중지 프로세스 확인
+$ ps
+			 
+## 10초에 다시 ps 요청
+$ ps
+$ ps -ef | grep sleep # 프로세스 확인
+
+# 프로세스 삭제
+
+$ sleep 50 & 
+$  ps -ef | grep sleep  # sleep이 들어간 프로세스 찾기
+$  kill -9 4414  
+
+
+# 포그라운드 --> 백그라운드 --> 포그라운드
+
+
+$ sleep 100
+  # Ctrl + Z로 중지하기
+$ jobs
+
+$ bg %1    # [1]작업을 background로 실행
+
+$ fg %1    # [1]작업을 forground로 실행
+  # Ctrl + C로 종료
+		  
+ -------------------------------------------------------------
+실습 37>  프로세스 스케쥴러
+	 
+
+$ vi  mycron.txt
+    */2 * * * * echo "hello cron" >> hello.txt
+     * * * * * date >> date.txt
+
+$ crontab mycron.txt   # 실행
+$ crontab  -l    # 목록 확인
+
+
+#  파일 확인
+$ watch -n 1   cat hello.txt    # 1초마다  cat hello.txt 실행하기
+$ watch -n 1   cat date.txt
+$ tail  hello.txt
+$ tail  date.txt
+
+$ crontab  -r    # 삭제
+
+///////////////////////////
+ 6장  네트워크
+//////////////////////////////
+
+ -------------------------------------------------------------
+실습 38> apache2 설치하고 웹브라우저(호스트)에서 요청하기
+		   
+$ sudo apt update & sudo apt install apache2
+$ systemctl status apache2
+$ sudo systemctl enable apache2 
+$ curl http://localhost:80
+			  
+ -------------------------------------------------------------
+실습 39> http에서 파일 다운로드.
+	    
+$ sudo apt update
+$ sudo apt install wget -y
+
+$ wget --show-progress   http://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64.iso
+			
+$ wget -c  http://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64.iso
+
+$ wget   http://cdimage.kali.org/kali-2026.3/kali-linux-2026.3-installer-amd64.iso  & 
+	
+$ jobs
+$ kill %1  
+$ kill -9  %wget  
+		     
+
+///////////////////////////
+ 7 장  시스템부팅
+//////////////////////////////			
+
+ -------------------------------------------------------------
+실습 40>
+ 
+$ systemctl get-default    # 현재 상태 확인
+
+
+# 모드 변경 (임시적)
+ $ sudo init 3
+ $sudo init 5
+
+
+ # 모드 변경 (영구적 )
+$ systemctl set-default multi-user.target
+$ systemctl set-default graphical.target
+
+
+ # 종료 및 재부팅
+ $  sudo init 0 
+ $  sudo init 6 
+ --------------------------------------------------------------------------------------------------
