@@ -307,4 +307,336 @@ docker ps --format "{{.Names}}"	# 컨테이너의 이름만 출력
 docker ps -q | wc -l 		# 현재 실행중인 컨테이너 개수 출력
 
 
+---------------------------------------------------------------------------------------------
+실습20>  docker 컨테이너에 직접 접속하지 않고 명령어 실행
+
+
+#초기화
+docker stop $(docker ps -q)  # 실행중인 모든 컨테이너 중지
+docker rm  $(docker ps -aq)  # 모든 컨테이터 삭제
+docker image prune -a   	# 모든 이미지 삭제
+
+
+docker run -d --name web1 -p 1234:80  nginx   # nginx 실행
+
+docker exec web1 pwd                                   # 현재 디렉터리 확인
+docker exec -w /etc/nginx web1 pwd	          # 특정 디렉터리에서 실행
+docker exec web1 ls                                       # 파일 목록 조회
+docker exec web1 env                                    # 환경변수 조회
+docker exec -e USERNAME=Hong web1 printenv USERNAME  # 환경변수 추가
+
+docker exec web1 whoami                              # 현재 사용자 확인
+docker exec web1 cat /etc/nginx/nginx.conf       # nginx 설정 파일 확인
+docker exec web1 nginx -v                              # nginx 버전 확인			   
+docker exec -it web1 bash                                  # nginx Shell 접속
+
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity  # ubuntu 실행
+docker exec ubuntu1 ps -ef                                 # 프로세스 확인
+docker exec ubuntu1 touch test.txt                       # 컨테이너 내부 파일 생성
+docker exec ubuntu1 ls -al				      # 컨테이너 내부 목록
+
+
+docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=1234 mysql:8.3  # mysql 실행
+docker exec -it mysql-db bash                                                                   # MySQL 접속,
+bash-4.4# mysql -u root -p
+
+
+---------------------------------------------------------------------------------------------
+실습21>  docker 컨테이너와 호스트 간 파일/디렉터리 복사
+
+
+docker run -d --name web1 -p 1234:80 nginx
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity   # sleep infinity  지정하여 ubuntu 종료지연됨
+				
+# HOST --> Container 파일 및 디렉터리 복사
+echo "Hello Docker" > copy.txt         # Host 파일 생성
+docker cp copy.txt ubuntu1:/root/      # 복사
+docker exec ubuntu1 cat /root/copy.txt # 확인
+				
+# Container → Host 파일 및 디렉터리 복사
+docker exec ubuntu1 touch /root/sample.txt   # 컨테이너 내부 파일 생성
+docker exec ubuntu1 ls -al /root
+docker cp ubuntu1:/root/sample.txt .             # 복사
+							
+# web1 (nginx 홈페이지 변경)
+# http://localhost:1234
+echo  "<h2>Hello World</h2>" > index.html
+docker  cp   index.html    web1:usr/share/nginx/html/index.html
+# http://localhost:1234
+			   
+
+---------------------------------------------------------------------------------------------
+실습22>  docker 컨테이너 상세 정보
+
+docker run -d --name web1 -p 1234:80 nginx
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity 
+
+docker inspect web1           # 모든 정보 출력
+docker inspect web1  ubuntu1  #  여러 컨테이너 조회	
+		   
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web1 # 컨테이너 IP 확인
+docker inspect -f '{{.State.Status}}' web1   # 실행 상태 확인
+docker inspect -f '{{.Config.Image}}' web1   # 이미지
+			   
+
+
+---------------------------------------------------------------------------------------------
+실습23>  docker 컨테이너 삭제
+
+docker ps				
+#docker stop web1
+#docker rm web1  # 종료부터 먼저하고 삭제
+
+docker rm -f web1   # 실행중인 경우에도 삭제됨.
+				
+docker rm -f ubuntu1 mysql-db    # 여러 개 삭제
+
+-----------------------------------------------------------------------				
+docker run -d --name web1 -p 1234:80 nginx
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity  
+
+docker stop web1  ubuntu1
+
+docker container prune    # 종료된 컨테이너만 일괄 삭제.  
+#docker rm $(docker ps -aq --filter status=exited) 동일기능.
+		
+-----------------------------------------------------------------------	
+docker run -d --name web1 -p 1234:80 nginx
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity  
+docker ps
+			       
+docker stop $(docker ps -q)    # 모든 실행 중 컨테이너 중지
+docker rm $(docker ps -aq)     # 모든 컨테이너 삭제 
+
+
+---------------------------------------------------------------------------------------------
+실습24>  docker 컨테이너 로그 출력
+
+docker run -d --name web1 -p 1234:80 nginx
+
+docker  logs web1             # web1 컨테이너 로그 출력
+docker  logs -f web1          # web1p 컨테이너 실시간 로그 출력,  웹브라우저에서 요청
+docker logs --tail 10 web1  # web1 컨테이너 로그 마지막 10줄 출력
+docker logs -f --tail 10 web1	# 최근 10줄을 실시간으로 출력
+
+docker logs -t web1           # web1 컨테이너 시간 출력
+docker logs --since 10m web1      # web1 컨테이너 최근 10분 동안의 로그를 출력
+docker logs --since "2026-11-17T10:00:00" web1  # 직접 날짜 지정 가능
+docker logs --until 10m web1      # web1 컨테이너 최근 10분 전까지 로그를 출력
+			
+
+
+---------------------------------------------------------------------------------------------
+실습25>  docker 컨테이너 시스템 자원 모니터링
+
+
+docker run -d --name web1 -p 1234:80 nginx
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity  
+
+
+docker stats                          #  실행 중인 모든 컨테이너 모니터링
+docker stats web1                  # web1 컨테이너 모니터링
+docker stats web1   ubuntu1     # web1과  ubuntu1 컨테이너 동시에 모니터링
+
+		  
+		  
+	   -------------------------------------------------------------------------------
+//////////////////////////////////////////
+ Docker 볼륨 ( Docker Volume )
+//////////////////////////////////////////	  
+
+---------------------------------------------------------------------------------------------
+실습26>  docker 에서 사용하는 데이터
+	
+
+#초기화
+docker stop $(docker ps -q)  # 실행중인 모든 컨테이너 중지
+docker rm  $(docker ps -aq)  # 모든 컨테이터 삭제
+docker image prune -a   	    # 모든 이미지 삭제
+
+	
+# 컨테이너에서 생성된 데이터는 휘발성 데이터 확인1 - ubuntu
+
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity
+echo "hello" > test.txt
+docker cp test.txt ubuntu1:/root/
+docker exec ubuntu1 cat /root/test.txt # 확인
+				   
+# ubuntu1 컨테이너 강제 삭제후 다시 실행
+docker rm -f ubuntu1
+
+docker run -d --name ubuntu1 ubuntu:24.04 sleep infinity
+docker exec ubuntu1 cat /root/test.txt      # 확인하면 파일이 없음. 이유는 컨테이너는 데이터 유지 안함.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# 컨테이너에서 생성된 데이터는 휘발성 데이터 확인2- nginx
+
+docker run -it -d --name web -p 1234:80  nginx   # nginx 생성
+
+#웹브라우저 요청
+http://localhost:1234
+		 
+#컨테이너에 접속
+docker exec -it web bash
+
+#파일 생성
+echo "<h2>Hello Volume</h2>" > /usr/share/nginx/html/index.html
+		 
+#웹브라우저 요청
+http://localhost:1234
+		 
+#컨테이너 강제삭제
+docker rm -f web
+		 		 
+#6. web 컨테이너 생성
+docker run -it -d --name web  -p 1234:80 nginx 
+		 
+#웹브라우저 요청
+http://localhost:1234    # 데이터 유지 안됨
+
+
+
+---------------------------------------------------------------------------------------------
+실습27>  Volume 이용한 데이터 유지
+
+# 볼륨생성
+docker volume create  web-data 
+docker run -it -d --name web2 -p 8080:80  -v web-data:/usr/share/nginx/html   nginx   # nginx 생성 + 볼륨설정
+
+#웹브라우저 요청
+http://localhost:8080
+		 
+#컨테이너에 접속
+docker exec -it web2 bash
+
+#파일 생성
+echo "<h2>Hello Volume</h2>" > /usr/share/nginx/html/index.html
+		 
+#웹브라우저 요청
+http://localhost:1234
+		 
+#컨테이너 강제삭제
+docker rm -f web2
+		 		 
+#6. web 컨테이너 생성
+docker run -it -d --name web2  -p 8080:80 -v web-data:/usr/share/nginx/html nginx 
+		 
+#웹브라우저 요청
+http://localhost:8080    # 데이터 유지됨.
+
+---------------------------------------------------------------------------------------------
+실습28>  Bind Mount 이용한 데이터 유지
+
+#1. Host에 직접 경로 생성
+mkdir testdir
+echo "Hello Host" > testdir/index.html
+		 
+#2. web 컨테이너 생성
+#docker run -it -d --name nginx-bind -p 1235:80 -v $(pwd)/testdir:/usr/share/nginx/html nginx   # 리눅스환경
+
+# 윈도우 powershell 에서는 $(pwd) 대신에 ${pwd}  경로 지정
+docker run -it -d --name nginx-bind -p 1235:80 -v ${pwd}/testdir:/usr/share/nginx/html nginx  
+
+		 		 
+#4.웹브라우저 요청
+http://localhost:1235
+		 
+#5. 컨테이너 강제 삭제
+docker rm -f nginx-bind
+		 		 
+#6. 동일 Host 경로 재사용하여 nginx-bind 컨테이너 생성
+docker run -it -d --name nginx-bind -p 1235:80 -v ${pwd}/testdir:/usr/share/nginx/html nginx  
+		 
+		 
+#7.웹브라우저 요청
+http://localhost:1235  # 데이터유지
+		 
+		 
+#8. Host 경로 파일 수정
+echo "Modified" > testdir/index.html
+		 
+#9.웹브라우저 요청
+http://localhost:1235  # 변경사항 바로 적용
+
+
+---------------------------------------------------------------------------------------------
+실습29>  env 환경변수1 (  -e 옵션 이용 )
+
+
+# 단일 환경변수
+docker run -d --rm  --name  my-app  -e  MY_NAME=lion  nginx
+docker exec -it my-app bash
+root# env
+root# printenv
+root# echo  $MY_NAME
+
+# 여러 환경변수
+docker run -it --rm  --name  my-app2   -e  DB_HOST=localhost -e  DB_PORT=3306  -e  MODE=prod  nginx    bash
+root# env
+root# echo  $DB_HOST
+
+
+---------------------------------------------------------------------------------------------
+실습30>  env 환경변수2 (  --env-file 옵션 이용 )
+
+
+#1) .env 파일 작성 ( VSC에서 직접 작성한다)
+DB_HOST=localhost
+DB_USER=lion
+DB_PASSWORD=password
+
+# 2) 
+docker run -d --rm --name  my-app3  --env-file  .env  nginx
+
+#3) 
+docker exec -it my-app3 bash
+root# env
+root# echo  $DB_PASSWORD
+
+////////////////////////////////////////////////////////////////////////////////
+ ---------------------------------------------------------------------------------------------
+실습31>  MySQL 데이터베이스 연동
+
+#https://hub.docker.com/_/mysql#environment-variables 참조
+# MYSQL_ROOT_PASSWORD 환경변수 설정은 필수
+#실제 저장되는 볼륨 저장소도 가이드해줌
+# The -v /my/own/datadir:/var/lib/mysql 
+
+docker volume create mysql-data-vol
+docker volume ls
+
+docker run -it -d --name mysql-vtest -e MYSQL_ROOT_PASSWORD=1234  -e MYSQL_DATABASE=dockertest -v mysql-data-vol:/var/lib/mysql  mysql:8.3
+		 
+docker exec -it mysql-vtest bash
+bash-4.2# mysql -u root -p
+ 
+ #mysql> show databases;
+ #mysql> use dockertest;
+ #mysql> create table mytest ( name char, age int );
+ #mysql> insert into mytest (name, age) values ('a', 20);
+ #mysql> exit
+ # bash-4.2# exit
+
+docker rm -f mysql-vtest   # 컨테이너 강제 삭제       
+
+docker run -it -d --name mysql-vtest -e MYSQL_ROOT_PASSWORD=1234  -e MYSQL_DATABASE=dockertest -v mysql-data-vol:/var/lib/mysql  mysql:8.3
+		
+docker exec -it mysql-vtest bash
+
+docker exec -it mysql-vtest bash
+bash-4.2# mysql -u root -p
+
+#mysql> show databases;
+#mysql> use dockertest;
+#mysql> show tables;
+		+----------------------+
+		| Tables_in_dockertest |
+		+----------------------+
+		| mytest               |
+		+----------------------+
+		1 row in set (0.00 sec)
+		
+docker rm -f mysql-vtest
+docker volume rm mysql-data-vol
+
 		------------------------------------------------------------------------------
