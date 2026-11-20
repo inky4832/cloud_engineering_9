@@ -1,0 +1,337 @@
+////////////////////////////
+
+Docker 강좌정리
+
+////////////////////////////
+ 6장. Dockerfile
+//////////////////////////// 
+
+실습1>  제공된 dockerfile_exam.zip 이용 
+
+#Dockerfile 내용
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 80
+
+CMD ["node", "app.js"]
+------------------------------------------
+#초기화
+docker stop $(docker ps -q)  # 실행중인 모든 컨테이너 중지
+docker rm  $(docker ps -aq)  # 모든 컨테이터 삭제
+docker image prune -a   	# 모든 이미지 삭제
+	
+docker build -t my-app:v1 .
+  
+docker run -it -d --name myapp -p 9000:80 my-app:v1
+ 
+		
+# welcome.html 수정
+	
+# 다시 빌드 
+docker build -t my-app:v2 . 
+
+docker rm -f myapp
+docker run -it -d --name my-app -p 9000:80 my-app:v2
+
+
+#  이전 빌드 항목 캐시 정보 전체 삭제
+# docker builder prune   -a
+		
+------------------------------------------------------------
+실습2>  제공된 boot_Dockerfile.zip 이용 
+
+# boot 빌드하기 
+./gradlew clean build 
+
+docker build  -t  springboot21   .
+docker run  -d --name spring21  -p  8080:8080   springboot21
+
+#웹브라우저에서 요청:  
+http://localhost:8080
+
+docker rm -f  spring21
+docker rmi  springboot21
+
+
+------------------------------------------------------------
+실습3>  제공된 boot_Dockerfile2_volume.zip 이용 
+	   
+	
+# boot 빌드하기 
+./gradlew clean build 
+		
+docker build -t spring-volume-demo .
+			  
+#볼륨 생성
+ docker volume create spring_upload_volume			
+ 
+ docker run  -d --name spring-volume-app  -p  8080:8080   -v spring_upload_volume:/app/upload   spring-volume-demo
+						
+# Talend API Tester에서 파일 업로드 요청. 
+
+#컨테이너 삭제
+docker rm -f spring-volume-app
+			 
+#다시 실행하고 확인
+docker run  -d --name spring-volume-app  -p  8080:8080  -v spring_upload_volume:/app/upload   spring-volume-demo
+						
+#웹브라우저에서 요청:  
+http://localhost:8080/files   # 데이터가 유지됨.
+
+
+docker rm -f  spring-volume-app
+docker rmi  spring-volume-demo
+
+
+------------------------------------------------------------------------------
+실습4>  제공된 boot_Dockerfile3_ENV.zip 이용
+		
+#Dockerfile 확인하기
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY build/libs/*.jar app.jar
+
+ENV SERVER_PORT=8080
+ENV APP_NAME=spring-env-demo
+ENV APP_MESSAGE="Dockerfile 기본 메시지"
+ENV APP_UPLOAD_DIR=/app/upload
+ENV SPRING_PROFILES_ACTIVE=prod
+
+RUN mkdir -p /app/upload
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+--------------------------------------------------------------------
+			
+#boot 빌드하기 
+ ./gradlew clean build 
+			  
+#이미지 빌드하기
+docker build -t spring-env-demo .
+			  
+#컨테이너 실행.
+ docker run -d --name env-app -p 8080:8080 spring-env-demo			
+
+##웹브라우저에서 요청:
+GET  http://localhost:8080/env
+			 
+
+docker rm -f env-app
+----------------------------------------------------------------------------------			 
+# 컨테이너 실행시  환경변수 동적으로 설정하기 
+# 실행 시 env 덮어쓰기
+			  
+docker run -d  --name env-app -p 9090:9090 -e SERVER_PORT=9090 -e APP_MESSAGE="실행 시 전달한 메시지"  -e SPRING_PROFILES_ACTIVE=dev  spring-env-demo
+				   
+##웹브라우저에서 요청:
+http://localhost:9090/env 
+				
+docker rm -f env-app
+docker rmi  spring-env-demo
+				
+
+------------------------------------------------------------------------------
+실습5> 멀티 스테이지 Docker 패턴 
+
+# Dockerfile 내용
+# 멀티 스테이지 패턴 적용 후 코드임
+# ======================
+# Build Stage
+# ======================
+FROM gradle:8.10.2-jdk21 AS builder
+
+WORKDIR /build
+
+COPY . .
+
+RUN gradle clean build -x test
+
+# ======================
+# Runtime Stage
+# ======================
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=builder \
+     /build/build/libs/*.jar \
+     app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","app.jar"]
+------------------------------------------------------------------------------
+
+docker build -t spring-app-v2 .
+docker run -it -d --name spring-app-v2  spring-app-v2
+				  
+# 접속해서  소스코드 확인
+docker exec -it spring-app-v2 bash 
+root@27c8a1c0b7d6:/app# ls
+app.jar				
+				 
+docker rm -f  spring-app-v2
+docker rmi  spring-app-v2				
+
+////////////////////////////
+ 6장. Dockerfile
+//////////////////////////// 
+ 
+실습6>  boot_Dockerfile4_Network_mysql1_host.zip 이용 
+
+# 먼저 확인해야 될 사항.		    
+Dockerfile :  multi-stage build 패턴 적용함.
+HOST Mysql:  testdb에서 users 테이블 삭제.
+build.gradle :   implementation("com.mysql:mysql-connector-j:8.3.0") # 버전 명시
+application.yml :     url: jdbc:mysql://host.docker.internal:3306/testdb # host.docker.internal 명시
+
+
+#  Docker 빌드하기.
+docker build -t spring-mysql-demo  .
+
+docker run -d --name spring-mysql-app -p 8090:8080  spring-mysql-demo   
+
+#웹브라우저에서 요청:
+http://localhost:8090/api/users
+
+
+docker rm -f  spring-mysql-app
+docker rmi spring-mysql-demo
+
+			 
+----------------------------------------------------------------------------------
+실습7>  boot_Dockerfile4_Network_mysql2_container.zip 이용 ( 컨테이너간 연동: IPAddress 이용 )
+	
+# 먼저 확인해야 될 사항.
+Dockerfile :  multi-stage build 패턴 적용함.
+build.gradle :   implementation("com.mysql:mysql-connector-j:8.3.0") # 버전 명시
+application.yml :        url: jdbc:mysql://172.17.0.2:3306/testdb  # MySQL 컨테이너 IP 명시
+			
+
+# mysql 생성			
+docker volume create mysql-data-vol2
+docker volume ls
+
+docker run -it -d --name mysql-data2 -e MYSQL_ROOT_PASSWORD=1234  -e MYSQL_DATABASE=testdb -v mysql-data-vol2:/var/lib/mysql  mysql:8.3
+
+docker container inspect mysql-data2   #  IPAddress 조회해서 SpringBoot에서 사용
+docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' mysql-data2  # 172.17.0.2	 									    
+# boot 수정
+application.yml :        url: jdbc:mysql://172.17.0.2:3306/testdb  # MySQL 컨테이너 IP 명시
+
+
+# boot 생성  
+docker build -t spring-mysql-demo2  .
+
+docker run -d --name spring-mysql-app2 -p 8090:8080  spring-mysql-demo2   
+		
+# SpringBoot 로그 확인 ( 디버깅용)
+docker logs -f spring-mysql-app2	  
+		  
+#웹브라우저에서 요청:
+http://localhost:8090/api/users
+			 
+docker rm -f  spring-mysql-app2
+docker rmi spring-mysql-demo2	 
+
+
+
+
+------------------------------------------------------------------------------------
+실습8>  boot_Dockerfile4_Network_mysql3_network.zip 이용 ( 컨테이너간 연동: 컨테이너명 이용 )
+	
+# 먼저 확인해야 될 사항.
+Dockerfile :  multi-stage build 패턴 적용함.
+build.gradle :   implementation("com.mysql:mysql-connector-j:8.3.0") # 버전 명시
+application.yml :  url: jdbc:mysql://mysql-data3:3306/testdb     # MySQL 컨테이너명(ex.mysql-data3)명시
+			
+		
+# network 생성
+docker network create  boot-net
+docker network ls
+
+		   	
+# mysql 생성	
+docker volume create mysql-data-vol3
+docker volume ls
+
+docker run -it -d --name mysql-data3 -e MYSQL_ROOT_PASSWORD=1234  -e MYSQL_DATABASE=testdb  -v mysql-data-vol3:/var/lib/mysql  --network  boot-net  mysql:8.3
+
+
+# boot 생성  
+docker build -t spring-mysql-demo3 .
+docker run -d --name spring-mysql-app3  -p 8090:8080  --network boot-net  spring-mysql-demo3
+ 
+			  		  
+#웹브라우저에서 요청:
+http://localhost:8090/api/users
+		
+
+docker rm -f  spring-mysql-app3
+docker rmi spring-mysql-demo3	 	 
+
+	
+
+////////////////////////////
+ 8장. Docker Compose
+//////////////////////////// 
+
+실습9> project.zip 이용
+
+#docker-compose.yml 내용
+
+services:
+  mysql-data5:
+    image: mysql:8.3
+    container_name: mysql-data5
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: testdb
+    volumes:
+      - mysql-data-vol5:/var/lib/mysql
+    networks:
+      - fullstack-net
+
+  springboot-backend-app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: springboot-backend-app
+    ports:
+      - "8090:8080"
+    depends_on:
+      - mysql-data5
+    networks:
+      - fullstack-net
+
+volumes:
+  mysql-data-vol5:
+
+networks:
+  fullstack-net:
+    driver: bridge
+
+-------------------------------------------------------------------------------------------------	  
+# compose 실행
+			 
+docker compose up -d  --build  # 백그라운드로 실행, 다시 빌드하기 
+				        # --build 지정하지 않으면 이전 이미지 재사용함.
+docker compose up   --build	
+
+
+#웹브라우저에서 요청:
+http://localhost:8090/api/users
+
+
+docker compose down -v  # 컨테이너 종료 + volume 삭제 + network 삭제
